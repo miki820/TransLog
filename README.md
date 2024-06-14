@@ -1,9 +1,10 @@
 # Transport Company Management System
 
-Attributes:
+<h2>Attributes:</h2>
 
-Repeatable attribute: List of functions in Vehicle Class
+- Repeatable attribute: List of functions in Vehicle Class
 
-Composition attribute: Engine in Vehicle Class
+- Composition attribute: Engine in Vehicle Class
 
-Composition: Engine is assosiated with Vehicle by composition 1-1.
+<h2>Assosiations:</h2>
+- Composition: Engine is assosiated with Vehicle by composition 1-1.
