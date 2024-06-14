@@ -6,5 +6,13 @@ public class Vehicle {
     private String model;
     private static Set<String> licencePlateNumber;
     private List<String> functions;
-    private Manufacturer manufacturer;
+    private Engine engine;
+
+    public void addEngine(Engine engine) throws Exception {
+        if (this.engine == null) {
+            this.engine = engine;
+        } else {
+            throw new Exception("Engine already exists");
+        }
+    }
 }
