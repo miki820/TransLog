@@ -12,7 +12,10 @@ public class Engine {
                 throw new Exception("Car doesn't exists");
         }
 
+        // Create a new engine
         Engine engine = new Engine(vehicle, name);
+
+        // Add to the Vehicle
         vehicle.addEngine(engine);
 
         return engine;
