@@ -7,11 +7,9 @@ public class Vehicle {
     private final String brand;
     private final String model;
 
-    // Extent to store all Vehicles
-    private static final List<Vehicle> allVehicles = new ArrayList<>();
-
-    // Licence plate number is unique
-    private static final Set<String> licencePlateNumber = new HashSet<>();
+    // Set to check if Licence plate number is unique
+    private static final Set<String> licencePlateNumberSet = new HashSet<>();
+    private String licencePlateNumber;
 
     // Functions are a repeatable attribute
     private final List<String> functions = new ArrayList<>();
@@ -19,13 +17,23 @@ public class Vehicle {
     // Engine is a composite attribute
     private Engine engine;
 
+    // Extent to store all Vehicles
+    private static final List<Vehicle> allVehicles = new ArrayList<>();
+
     // List as a class attribute to store all engines to prohibit engine sharing and to have an extent of all engines
     private static final List<Engine> allEngines = new ArrayList<>();
 
-    public Vehicle(String brand, String model) {
+    public Vehicle(String brand, String model, String licencePlateNumber, String... functions) {
         this.brand = brand;
         this.model = model;
-        addVehicleToExtent(this);
+        this.licencePlateNumber = licencePlateNumber;
+        if (checkLicencePlateNumber(this.licencePlateNumber)) {
+            throw new IllegalArgumentException("This licence plate number already exists");
+        }
+        for (String function : functions){
+            addFunction(function);
+        }
+        addVehicle(this);
     }
 
 
@@ -35,7 +43,7 @@ public class Vehicle {
         if (this.engine == null) {
 
             // Check if the engine has been already added to any vehicle
-            if (allEngines.contains(engine)){
+            if (allEngines.contains(engine)) {
                 throw new Exception("This engine is already connected with some vehicle.");
             }
 
@@ -48,50 +56,66 @@ public class Vehicle {
         }
     }
 
-    private static void addVehicleToExtent(Vehicle vehicle){
+    // Method that removes only engine from a vehicle
+    public void removeEngine() {
+        if (this.engine != null) {
+            allEngines.remove(this.engine);
+            engine = null;
+        }
+    }
+
+    private static void addVehicle(Vehicle vehicle) {
         allVehicles.add(vehicle);
-    }
-
-    public static void clear(){
-        allVehicles.clear();
-        allEngines.clear();
-    }
-
-    private static void removeVehicleFromExtent(Vehicle vehicle){
-        allVehicles.remove(vehicle);
+        licencePlateNumberSet.add(vehicle.getLicencePlateNumber());
     }
 
     // Method that removes vehicle with its engine
     public static void removeVehicle(Vehicle vehicle) throws Exception {
         if (vehicle != null) {
             vehicle.removeEngine();
-            removeVehicleFromExtent(vehicle);
+            remove(vehicle);
         } else {
             throw new Exception("This vehicle doesn't exists");
         }
     }
 
-    // Method that removes only engine from a vehicle
-    public void removeEngine(){
-        if (this.engine != null){
-            allEngines.remove(this.engine);
-            engine = null;
+    private static void remove(Vehicle vehicle) {
+        allVehicles.remove(vehicle);
+    }
+
+    public static void clear() {
+        allVehicles.clear();
+        allEngines.clear();
+    }
+
+    private static boolean checkLicencePlateNumber(String licencePlateNumber) {
+        return licencePlateNumberSet.contains(licencePlateNumber);
+    }
+
+    public void setLicencePlateNumber(String licencePlateNumber) {
+        if (checkLicencePlateNumber(this.licencePlateNumber)) {
+            throw new IllegalArgumentException("This licence plate number already exists");
+        }
+        licencePlateNumberSet.remove(this.licencePlateNumber);
+        this.licencePlateNumber = licencePlateNumber;
+        licencePlateNumberSet.add(this.licencePlateNumber);
+    }
+
+    public void addFunction(String function){
+        if (function != null && !function.trim().isEmpty()){
+            functions.add(function);
         }
     }
 
-    public String getBrand() {
-        return brand;
+    public void deleteFunction(String function){
+        if(!functions.contains(function)){
+            throw new IllegalArgumentException("Vehicle doesn't have this function");
+        } else {
+            functions.remove(function);
+        }
     }
 
-    public String getModel() {
-        return model;
-    }
-
-    public Engine getEngine() {
-        return engine;
-    }
-
-    public static void showAllVehicles(){
+    public static void showAllVehicles() {
         System.out.println("Extent of the class: " + Vehicle.class.getName());
 
         for (Vehicle vehicle : allVehicles) {
@@ -107,9 +131,37 @@ public class Vehicle {
         }
     }
 
+    public String getBrand() {
+        return brand;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public String getLicencePlateNumber() {
+        return licencePlateNumber;
+    }
+
     @Override
     public String toString() {
         String engineInfo = (engine != null) ? getEngine().getName() : "No engine";
-        return "Vehicle: " + "Brand: " + getBrand() + ", Model: " + getModel() + ", Engine: " + engineInfo;
+        String functionsInfo;
+
+        if (functions.isEmpty()) {
+            functionsInfo = "No Functions";
+        } else {
+            StringBuilder functionsBuilder = new StringBuilder();
+            for (String function : functions) {
+                functionsBuilder.append(function).append(" ");
+            }
+            functionsInfo = functionsBuilder.toString().trim();
+        }
+
+        return "Vehicle: " + "Brand: " + getBrand() + ", Model: " + getModel() + ", Engine: " + engineInfo + ", Plate Number: " + licencePlateNumber + ", Functions: " + functionsInfo;
     }
 }
