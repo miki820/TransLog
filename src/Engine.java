@@ -1,6 +1,6 @@
 public class Engine {
-    private Vehicle vehicle;
-    private String name;
+    private final Vehicle vehicle;
+    private final String name;
 
     // Private constructor so that we can't create part on its own
     private Engine(Vehicle vehicle, String name) {

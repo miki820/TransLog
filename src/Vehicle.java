@@ -4,23 +4,23 @@ import java.util.List;
 import java.util.Set;
 
 public class Vehicle {
-    private String brand;
-    private String model;
+    private final String brand;
+    private final String model;
 
     // Extent to store all Vehicles
-    private static List<Vehicle> allVehicles = new ArrayList<>();
+    private static final List<Vehicle> allVehicles = new ArrayList<>();
 
     // Licence plate number is unique
-    private static Set<String> licencePlateNumber = new HashSet<>();
+    private static final Set<String> licencePlateNumber = new HashSet<>();
 
     // Functions are a repeatable attribute
-    private List<String> functions = new ArrayList<>();
+    private final List<String> functions = new ArrayList<>();
 
     // Engine is a composite attribute
     private Engine engine;
 
     // List as a class attribute to store all engines to prohibit engine sharing and to have an extent of all engines
-    private static List<Engine> allEngines = new ArrayList<>();
+    private static final List<Engine> allEngines = new ArrayList<>();
 
     public Vehicle(String brand, String model) {
         this.brand = brand;
