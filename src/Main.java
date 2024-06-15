@@ -1,21 +1,19 @@
 public class Main {
     public static void main(String[] args) throws Exception {
-        Vehicle vehicle = new Vehicle("Toyota", "Avensis", "WGR 07487", "Muzyka", "Szyberdach");
+        Truck vehicle = new Truck("Toyota", "Avensis", "WGR 07487", 500, "Muzyka", "Szyberdach");
         Engine engine = Engine.createEngine(vehicle, "v12");
 
-        Vehicle vehicle2 = new Vehicle("BMW", "M4", "WGR 07488", "Muzyka", "Szyberdach");
+        DeliveryTruck vehicle2 = new DeliveryTruck("BMW", "M4", "WGR123", 100);
         Engine engine2 = Engine.createEngine(vehicle2, "V8");
 
-        vehicle2.removeEngine();
-        vehicle2.addEngine(engine2);
-
-        vehicle2.addFunction("Ogien");
-        vehicle2.deleteFunction("Szyberdach");
-
-        Vehicle.removeVehicle(vehicle);
-        vehicle2.removeEngine();
-
+        System.out.println("=========================");
         Vehicle.showAllVehicles();
         Vehicle.showAllEngines();
+        System.out.println("=========================");
+        Truck.showAllVehicles();
+        Truck.showAllEngines();
+        System.out.println("=========================");
+        DeliveryTruck.showAllVehicles();
+        DeliveryTruck.showAllEngines();
     }
 }

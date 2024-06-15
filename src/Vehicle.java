@@ -2,10 +2,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
-public class Vehicle {
+public abstract class Vehicle {
     private final String brand;
     private final String model;
+    private boolean underRepair;
 
     // Set to check if Licence plate number is unique
     private static final Set<String> licencePlateNumberSet = new HashSet<>();
@@ -30,12 +32,12 @@ public class Vehicle {
         if (checkLicencePlateNumber(this.licencePlateNumber)) {
             throw new IllegalArgumentException("This licence plate number already exists");
         }
-        for (String function : functions){
+        for (String function : functions) {
             addFunction(function);
         }
         addVehicle(this);
+        this.underRepair = false;
     }
-
 
     // Method that adds engine to a vehicle
     public void addEngine(Engine engine) throws Exception {
@@ -65,7 +67,7 @@ public class Vehicle {
     }
 
     private static void addVehicle(Vehicle vehicle) {
-        allVehicles.add(vehicle);
+        allVehicles.add((Vehicle) vehicle);
         licencePlateNumberSet.add(vehicle.getLicencePlateNumber());
     }
 
@@ -101,14 +103,14 @@ public class Vehicle {
         licencePlateNumberSet.add(this.licencePlateNumber);
     }
 
-    public void addFunction(String function){
-        if (function != null && !function.trim().isEmpty()){
+    public void addFunction(String function) {
+        if (function != null && !function.trim().isEmpty()) {
             functions.add(function);
         }
     }
 
-    public void deleteFunction(String function){
-        if(!functions.contains(function)){
+    public void deleteFunction(String function) {
+        if (!functions.contains(function)) {
             throw new IllegalArgumentException("Vehicle doesn't have this function");
         } else {
             functions.remove(function);
@@ -124,10 +126,45 @@ public class Vehicle {
     }
 
     public static void showAllEngines() {
-        System.out.println("Extent of the class: Engine");
+        System.out.println("Extent of the class: " + Engine.class.getName());
 
         for (Engine engine : allEngines) {
             System.out.println(engine);
+        }
+    }
+
+    public abstract void repair();
+
+    public void startRepair(){
+        if (underRepair) {
+            throw new IllegalStateException("Vehicle is already under repair");
+        }
+        underRepair = true;
+        System.out.println("Vehicle is now under repair");
+    }
+
+    public void simulateRepairProcess(long duration, TimeUnit timeUnit){
+        try{
+            System.out.println("Repairing: " + brand + " " + model);
+            Thread.sleep(timeUnit.toMillis(duration));
+            System.out.println("Vehicle repair completed.");
+        } catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+            System.err.println("Interrupted while repairing vehicle.");
+        }
+    }
+
+    public void endRepair(){
+        if (!underRepair) {
+            throw new IllegalStateException("Vehicle is not under repair");
+        }
+        underRepair = false;
+        System.out.println("Vehicle repair completed");
+    }
+
+    public void checkRepairStatus() {
+        if (underRepair) {
+            throw new IllegalStateException("Vehicle is under repair and cannot be used.");
         }
     }
 
@@ -147,6 +184,34 @@ public class Vehicle {
         return licencePlateNumber;
     }
 
+    public static List<Vehicle> getAllVehicles() {
+        return allVehicles;
+    }
+
+    public static List<Engine> getAllEngines() {
+        return allEngines;
+    }
+
+    public static List<Truck> getAllTrucks() {
+        List<Truck> trucks = new ArrayList<>();
+        for (Vehicle vehicle : allVehicles) {
+            if (vehicle instanceof Truck) {
+                trucks.add((Truck) vehicle);
+            }
+        }
+        return trucks;
+    }
+
+    public static List<DeliveryTruck> getAllDeliveryTrucks() {
+        List<DeliveryTruck> deliveryTrucks = new ArrayList<>();
+        for (Vehicle vehicle : allVehicles) {
+            if (vehicle instanceof DeliveryTruck) {
+                deliveryTrucks.add((DeliveryTruck) vehicle);
+            }
+        }
+        return deliveryTrucks;
+    }
+
     @Override
     public String toString() {
         String engineInfo = (engine != null) ? getEngine().getName() : "No engine";
@@ -162,6 +227,6 @@ public class Vehicle {
             functionsInfo = functionsBuilder.toString().trim();
         }
 
-        return "Vehicle: " + "Brand: " + getBrand() + ", Model: " + getModel() + ", Engine: " + engineInfo + ", Plate Number: " + licencePlateNumber + ", Functions: " + functionsInfo;
+        return "Brand: " + getBrand() + ", Model: " + getModel() + ", Engine: " + engineInfo + ", Plate Number: " + licencePlateNumber + ", Functions: " + functionsInfo;
     }
 }
