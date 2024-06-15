@@ -1,18 +1,11 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Engine {
     private Vehicle vehicle;
     private String name;
-
-    // Extent to store all engines
-    private static List<Engine> allEngines = new ArrayList<>();
 
     // Private constructor so that we can't create part on its own
     private Engine(Vehicle vehicle, String name) {
         this.vehicle = vehicle;
         this.name = name;
-        addEngineToExtent(this);
     }
 
     // Create Engine but first vehicle must exist because part can't exist on its own
@@ -31,18 +24,6 @@ public class Engine {
         return engine;
     }
 
-    public static void addEngineToExtent(Engine engine) {
-        allEngines.add(engine);
-    }
-
-    public static void clear(){
-        allEngines.clear();
-    }
-
-    public static void removeEngineFromExtent(Engine engine) {
-        allEngines.remove(engine);
-    }
-
     public String getName() {
         return name;
     }
@@ -51,16 +32,8 @@ public class Engine {
         return vehicle;
     }
 
-    public static void showAllEngines(){
-        System.out.println("Extent of the class: " + Engine.class.getName());
-
-        for (Engine engine : allEngines) {
-            System.out.println(engine);
-        }
-    }
-
     @Override
     public String toString() {
-        return "Engine: " + " Name: " + getName() + ", Vehicle: " + getVehicle().getBrand() + " " + getVehicle().getModel();
+        return "Engine: " + "Name: " + getName() + ", Vehicle: " + getVehicle().getBrand() + " " + getVehicle().getModel();
     }
 }

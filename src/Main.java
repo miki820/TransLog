@@ -3,17 +3,15 @@ public class Main {
         Vehicle vehicle = new Vehicle("Toyota", "Avensis");
         Vehicle vehicle2 = new Vehicle("Renuwa", "Citroen");
         Engine engine = Engine.createEngine(vehicle, "V12");
+        Engine engine2 = Engine.createEngine(vehicle2, "V12");
 
-
-        System.out.println(vehicle);
-        System.out.println(engine);
 
         Vehicle.showAllVehicles();
-        Engine.showAllEngines();
-
-        Engine.showAllEngines();
+        Vehicle.showAllEngines();
+        Vehicle.clear();
         Vehicle.showAllVehicles();
+        Vehicle.showAllEngines();
 
-        //jak zarzadzac listą ekstensji w czesci z poziomu calosci
+
     }
 }

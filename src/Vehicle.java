@@ -19,8 +19,8 @@ public class Vehicle {
     // Engine is a composite attribute
     private Engine engine;
 
-    // Set as a class attribute to store all engines to prohibit engine sharing
-    private static Set<Engine> allEngines = new HashSet<>();
+    // List as a class attribute to store all engines to prohibit engine sharing and to have an extent of all engines
+    private static List<Engine> allEngines = new ArrayList<>();
 
     public Vehicle(String brand, String model) {
         this.brand = brand;
@@ -28,6 +28,8 @@ public class Vehicle {
         addVehicleToExtent(this);
     }
 
+
+    // Method that adds engine to a vehicle
     public void addEngine(Engine engine) throws Exception {
         // Check if the vehicle has an engine
         if (this.engine == null) {
@@ -50,16 +52,16 @@ public class Vehicle {
         allVehicles.add(vehicle);
     }
 
-    private static void clear(){
+    public static void clear(){
         allVehicles.clear();
         allEngines.clear();
-        //Engine.clear();
     }
 
-    public static void removeVehicleFromExtent(Vehicle vehicle){
+    private static void removeVehicleFromExtent(Vehicle vehicle){
         allVehicles.remove(vehicle);
     }
 
+    // Method that removes vehicle with its engine
     public static void removeVehicle(Vehicle vehicle) throws Exception {
         if (vehicle != null) {
             vehicle.removeEngine();
@@ -69,12 +71,10 @@ public class Vehicle {
         }
     }
 
+    // Method that removes only engine from a vehicle
     public void removeEngine(){
         if (this.engine != null){
             allEngines.remove(this.engine);
-
-            // Delete of engine from extent while deleting engine in Vehicle
-            //Engine.removeEngineFromExtent(this.engine);
             engine = null;
         }
     }
@@ -99,9 +99,17 @@ public class Vehicle {
         }
     }
 
+    public static void showAllEngines() {
+        System.out.println("Extent of the class: Engine");
+
+        for (Engine engine : allEngines) {
+            System.out.println(engine);
+        }
+    }
+
     @Override
     public String toString() {
-        String engineInfo = (engine != null) ? engine.getName() : "No engine";
+        String engineInfo = (engine != null) ? getEngine().getName() : "No engine";
         return "Vehicle: " + "Brand: " + getBrand() + ", Model: " + getModel() + ", Engine: " + engineInfo;
     }
 }
