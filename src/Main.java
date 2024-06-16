@@ -12,14 +12,18 @@ public class Main {
         Service service2 = new Service(1500, "Naprawa Silnika");
 
         VehicleService vehicleService = new VehicleService(truck, service, LocalDate.now(), LocalDate.now().plusDays(1));
-        VehicleService vehicleService2 = new VehicleService(deliveryTruck, service2, LocalDate.now(), LocalDate.now().plusDays(2));
+        VehicleService vehicleService2 = new VehicleService(truck, service2, LocalDate.now(), LocalDate.now().plusDays(2));
 
         for (VehicleService serviceHistory : truck.getVehicleServices()) {
-            System.out.println(serviceHistory.getService().getPrice() + " " + serviceHistory.getService().getDescription() + " " + serviceHistory.getStartOfService() + " " + serviceHistory.getEndOfService());
+            System.out.println(serviceHistory.getService());
+        }
+
+        for (VehicleService vehicleHistory : service.getServicedVehicles()) {
+            System.out.println(vehicleHistory.getVehicle());
         }
 
         for (VehicleService vehicleHistory : service2.getServicedVehicles()) {
-            System.out.println(vehicleHistory.getVehicle().getBrand());
+            System.out.println(vehicleHistory.getVehicle());
         }
     }
 }

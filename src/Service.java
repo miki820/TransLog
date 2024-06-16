@@ -31,6 +31,9 @@ public class Service {
 
     @Override
     public String toString() {
-        return "Service: " + "price: " + price + ", description: " + description + ", servicedVehicles: " + servicedVehicles;
+        return "Service: " +
+                ", price: " + price +
+                ", description: " + description +
+                ", servicedVehicles: " + servicedVehicles;
     }
 }

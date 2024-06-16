@@ -33,9 +33,5 @@ public class VehicleService {
         return endOfService;
     }
 
-    @Override
-    public String toString() {
-        return "VehicleService: " + "vehicle: " + vehicle + ", service: " + service +
-                ", startOfService: " + startOfService + ", endOfService: " + endOfService;
-    }
+    
 }
