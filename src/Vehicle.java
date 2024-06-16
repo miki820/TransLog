@@ -34,10 +34,10 @@ public abstract class Vehicle {
     public Vehicle(String brand, String model, String licencePlateNumber, String... functions) {
         this.brand = brand;
         this.model = model;
-        this.licencePlateNumber = licencePlateNumber;
-        if (checkLicencePlateNumber(this.licencePlateNumber)) {
+        if (checkLicencePlateNumber(licencePlateNumber)) {
             throw new IllegalArgumentException("This licence plate number already exists");
         }
+        this.licencePlateNumber = licencePlateNumber;
         for (String function : functions) {
             addFunction(function);
         }
@@ -81,6 +81,7 @@ public abstract class Vehicle {
     public static void removeVehicle(Vehicle vehicle) throws Exception {
         if (vehicle != null) {
             vehicle.removeEngine();
+            licencePlateNumberSet.remove(vehicle.getLicencePlateNumber());
             remove(vehicle);
         } else {
             throw new Exception("This vehicle doesn't exists");
@@ -183,32 +184,38 @@ public abstract class Vehicle {
     }
 
     public void assignTransport(Transport transport) {
-        if (!transports.contains(transport)) {
+        if (transport.getVehicle1() != null && transport.getVehicle2() != null) {
+            throw new IllegalArgumentException("This transport has already two vehicles assigned");
+        } else if (!transports.contains(transport)) {
             transports.add(transport);
-            if (transport.getVehicle1() == null) {
-                transport.setVehicle2(this);
-            } else if (transport.getVehicle2() == null) {
-                transport.setVehicle1(this);
-            } else {
-                throw new IllegalArgumentException("Transport already has two vehicles assigned");
+            if(transport.getVehicle1() == null){
+                transport.setVehicle(this);
+            } else if (transport.getVehicle2() == null){
+                transport.setVehicle(this);
             }
+        } else {
+            throw new IllegalArgumentException("This vehicle is already assigned to this transport");
         }
     }
 
     public void removeTransport(Transport transport) {
-        if (!transports.contains(transport)) {
-            throw new IllegalArgumentException("There is no such transport assigned to this vehicle");
+        if (transport == null) {
+            throw new IllegalArgumentException("Transport cannot be null");
         } else {
-            transports.remove(transport);
-            if (transport.getVehicle1() == this) {
-                transport.setVehicle1(null);
-            } else if (transport.getVehicle2() == this) {
-                transport.setVehicle2(null);
+            if (!transports.contains(transport)) {
+                throw new IllegalArgumentException("There is no such transport assigned to this vehicle");
+            } else {
+                transports.remove(transport);
+                if (transport.getVehicle1() == this) {
+                    transport.setVehicle1(null);
+                } else if (transport.getVehicle2() == this) {
+                    transport.setVehicle1(null);
+                }
             }
         }
     }
 
-    public List<Transport> getTransports() {
+    public List<Transport> getAllTransports() {
         return transports;
     }
 

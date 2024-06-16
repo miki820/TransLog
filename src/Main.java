@@ -8,19 +8,30 @@ public class Main {
         DeliveryTruck deliveryTruck = new DeliveryTruck("BMW", "M4", "WGR123", 100);
         Engine engine2 = Engine.createEngine(deliveryTruck, "V8");
 
+        DeliveryTruck deliveryTruck2 = new DeliveryTruck("Reno", "xx", "WGR124", 100);
+        Engine engine3 = Engine.createEngine(deliveryTruck2, "V9");
 
-        Transport transport = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), truck, null);
-        /*Transport transport = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), null, deliveryTruck);
-        Transport transport = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), truck, deliveryTruck);*/
+        Transport transport1 = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), truck);
+        /*Transport transport2 = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), truck, null);
+        Transport transport3 = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), null, deliveryTruck);
+        Transport transport4 = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), truck, deliveryTruck);*/
+
+
+
+        Transport.showAllTransports();
+
+        transport1.setVehicle(deliveryTruck);
+
+        System.out.println(transport1.getVehicle1());
+        System.out.println(transport1.getVehicle2());
 
         Transport.showAllTransports();
 
-        transport.setVehicle2(deliveryTruck);
+        transport1.removeVehicle(deliveryTruck);
 
-        Transport.showAllTransports();
+        System.out.println(transport1.getVehicle1());
+        System.out.println(transport1.getVehicle2());
 
-        transport.removeVehicle(deliveryTruck);
-
-        Transport.showAllTransports();
+        System.out.println(transport1);
     }
 }

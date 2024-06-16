@@ -22,8 +22,6 @@ public class Transport {
         this.endingPoint = endingPoint;
         this.cargo = cargo;
         this.transportDate = transportDate;
-        this.vehicle1 = vehicle1;
-        this.vehicle2 = vehicle2;
 
         if (vehicle1 != null) {
             vehicle1.assignTransport(this);
@@ -36,27 +34,7 @@ public class Transport {
     }
 
     public Transport(String startingPoint, String endingPoint, String cargo, LocalDate transportDate, Vehicle vehicle1) {
-        if (vehicle1 == null) {
-            throw new IllegalArgumentException("At least one vehicle must be assigned to the transport.");
-        }
-        this.startingPoint = startingPoint;
-        this.endingPoint = endingPoint;
-        this.cargo = cargo;
-        this.transportDate = transportDate;
-        this.vehicle1 = vehicle1;
-        this.vehicle2 = null;
-
-        vehicle1.assignTransport(this);
-
-        addTransport(this);
-    }
-
-    public static void showAllTransports() {
-        System.out.println("Extent of the class: " + Transport.class.getName());
-
-        for (Transport transport : allTransports) {
-            System.out.println(transport);
-        }
+        this(startingPoint, endingPoint, cargo, transportDate, vehicle1, null);
     }
 
     private static void addTransport(Transport transport) {
@@ -84,7 +62,7 @@ public class Transport {
     }
 
     public void removeVehicle(Vehicle vehicle) {
-        if (vehicle == null){
+        if (vehicle == null) {
             throw new IllegalArgumentException("Vehicle cannot be null");
         }
 
@@ -105,6 +83,24 @@ public class Transport {
         }
     }
 
+    public void setVehicle1(Vehicle vehicle1) {
+        this.vehicle1 = vehicle1;
+    }
+
+    public void setVehicle2(Vehicle vehicle2) {
+        this.vehicle2 = vehicle2;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        if (this.vehicle1 == null) {
+            setVehicle1(vehicle);
+        } else if (this.vehicle2 == null) {
+            setVehicle2(vehicle);
+        } else {
+            throw new IllegalStateException("Both vehicle1 and vehicle2 are already set.");
+        }
+    }
+
     public Vehicle getVehicle1() {
         return vehicle1;
     }
@@ -113,14 +109,12 @@ public class Transport {
         return vehicle2;
     }
 
-    public void setVehicle1(Vehicle vehicle1) {
-        this.vehicle1 = vehicle1;
-        vehicle1.assignTransport(this);
-    }
+    public static void showAllTransports() {
+        System.out.println("Extent of the class: " + Transport.class.getName());
 
-    public void setVehicle2(Vehicle vehicle2) {
-        this.vehicle2 = vehicle2;
-        vehicle1.assignTransport(this);
+        for (Transport transport : allTransports) {
+            System.out.println(transport);
+        }
     }
 
     @Override
@@ -130,7 +124,7 @@ public class Transport {
                 ", EndingPoint: " + endingPoint +
                 ", Cargo: " + cargo +
                 ", TransportDate: " + transportDate +
-                ", Vehicle1: " + vehicle1 +
-                ", Vehicle2: " + vehicle2;
+                ", Vehicle1: " + (getVehicle1() != null ? getVehicle1().getClass().getName() + ": " + getVehicle1().getBrand() + " " + getVehicle1().getLicencePlateNumber() : "No Vehicle") +
+                ", Vehicle2: " + (getVehicle2() != null ? getVehicle2().getClass().getName() + ": " + getVehicle2().getBrand() + " " + getVehicle2().getLicencePlateNumber() : "No Vehicle");
     }
 }
