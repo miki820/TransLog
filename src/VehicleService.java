@@ -32,6 +32,4 @@ public class VehicleService {
     public LocalDate getEndOfService() {
         return endOfService;
     }
-
-    
 }

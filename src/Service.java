@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Service {
@@ -32,8 +33,7 @@ public class Service {
     @Override
     public String toString() {
         return "Service: " +
-                ", price: " + price +
-                ", description: " + description +
-                ", servicedVehicles: " + servicedVehicles;
+                "Price: " + price +
+                ", Description: " + description;
     }
 }
