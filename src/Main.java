@@ -9,18 +9,22 @@ public class Main {
         Engine engine2 = Engine.createEngine(deliveryTruck, "V8");
 
 
-        Transport transport = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), truck, null);
+        Transport transport = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), truck);
         /*Transport transport = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), null, deliveryTruck);
         Transport transport = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), truck, deliveryTruck);*/
 
         Transport.showAllTransports();
 
-        transport.setVehicle2(deliveryTruck);
+        transport.setVehicle(deliveryTruck);
 
         Transport.showAllTransports();
+
+        System.out.println(deliveryTruck.getTransports());
 
         transport.removeVehicle(deliveryTruck);
 
-        Transport.showAllTransports();
+        System.out.println(transport);
+
+
     }
 }

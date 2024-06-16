@@ -22,8 +22,6 @@ public class Transport {
         this.endingPoint = endingPoint;
         this.cargo = cargo;
         this.transportDate = transportDate;
-        this.vehicle1 = vehicle1;
-        this.vehicle2 = vehicle2;
 
         if (vehicle1 != null) {
             vehicle1.assignTransport(this);
@@ -36,19 +34,7 @@ public class Transport {
     }
 
     public Transport(String startingPoint, String endingPoint, String cargo, LocalDate transportDate, Vehicle vehicle1) {
-        if (vehicle1 == null) {
-            throw new IllegalArgumentException("At least one vehicle must be assigned to the transport.");
-        }
-        this.startingPoint = startingPoint;
-        this.endingPoint = endingPoint;
-        this.cargo = cargo;
-        this.transportDate = transportDate;
-        this.vehicle1 = vehicle1;
-        this.vehicle2 = null;
-
-        vehicle1.assignTransport(this);
-
-        addTransport(this);
+        this(startingPoint, endingPoint, cargo, transportDate, vehicle1, null);
     }
 
     public static void showAllTransports() {
@@ -105,22 +91,30 @@ public class Transport {
         }
     }
 
+    private void setVehicle1(Vehicle vehicle1) {
+        this.vehicle1 = vehicle1;
+    }
+
+    private void setVehicle2(Vehicle vehicle2) {
+        this.vehicle2 = vehicle2;
+    }
+
+    public void setVehicle(Vehicle vehicle) {
+        if (this.vehicle1 == null) {
+            setVehicle1(vehicle);
+        } else if (this.vehicle2 == null) {
+            setVehicle2(vehicle);
+        } else {
+            throw new IllegalStateException("Both vehicle1 and vehicle2 are already set.");
+        }
+    }
+
     public Vehicle getVehicle1() {
         return vehicle1;
     }
 
     public Vehicle getVehicle2() {
         return vehicle2;
-    }
-
-    public void setVehicle1(Vehicle vehicle1) {
-        this.vehicle1 = vehicle1;
-        vehicle1.assignTransport(this);
-    }
-
-    public void setVehicle2(Vehicle vehicle2) {
-        this.vehicle2 = vehicle2;
-        vehicle1.assignTransport(this);
     }
 
     @Override
@@ -130,7 +124,7 @@ public class Transport {
                 ", EndingPoint: " + endingPoint +
                 ", Cargo: " + cargo +
                 ", TransportDate: " + transportDate +
-                ", Vehicle1: " + vehicle1 +
-                ", Vehicle2: " + vehicle2;
+                ", Vehicle1: " + (vehicle1 != null ? vehicle1.getBrand() + " " + vehicle1.getLicencePlateNumber() : "No Vehicle") +
+                ", Vehicle2: " + (vehicle2 != null ? vehicle2.getBrand() + " " + vehicle2.getLicencePlateNumber() : "No Vehicle");
     }
 }
