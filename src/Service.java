@@ -28,4 +28,9 @@ public class Service {
     public String getDescription() {
         return description;
     }
+
+    @Override
+    public String toString() {
+        return "Service: " + "price: " + price + ", description: " + description + ", servicedVehicles: " + servicedVehicles;
+    }
 }
