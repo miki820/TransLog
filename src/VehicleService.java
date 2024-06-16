@@ -1,11 +1,11 @@
 import java.time.LocalDate;
 
 public class VehicleService {
-    private Vehicle vehicle;
-    private Service service;
+    private final Vehicle vehicle;
+    private final Service service;
 
-    private LocalDate startOfService;
-    private LocalDate endOfService;
+    private final LocalDate startOfService;
+    private final LocalDate endOfService;
 
     public VehicleService(Vehicle vehicle, Service service, LocalDate startOfService, LocalDate endOfService) {
         this.vehicle = vehicle;

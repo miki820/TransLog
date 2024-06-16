@@ -8,22 +8,19 @@ public class Main {
         DeliveryTruck deliveryTruck = new DeliveryTruck("BMW", "M4", "WGR123", 100);
         Engine engine2 = Engine.createEngine(deliveryTruck, "V8");
 
-        Service service = new Service(1000, "Wymiana oleju");
-        Service service2 = new Service(1500, "Naprawa Silnika");
 
-        VehicleService vehicleService = new VehicleService(truck, service, LocalDate.now(), LocalDate.now().plusDays(1));
-        VehicleService vehicleService2 = new VehicleService(truck, service2, LocalDate.now(), LocalDate.now().plusDays(2));
+        Transport transport = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), truck, null);
+        /*Transport transport = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), null, deliveryTruck);
+        Transport transport = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), truck, deliveryTruck);*/
 
-        for (VehicleService serviceHistory : truck.getVehicleServices()) {
-            System.out.println(serviceHistory.getService());
-        }
+        Transport.showAllTransports();
 
-        for (VehicleService vehicleHistory : service.getServicedVehicles()) {
-            System.out.println(vehicleHistory.getVehicle());
-        }
+        transport.setVehicle2(deliveryTruck);
 
-        for (VehicleService vehicleHistory : service2.getServicedVehicles()) {
-            System.out.println(vehicleHistory.getVehicle());
-        }
+        Transport.showAllTransports();
+
+        transport.removeVehicle(deliveryTruck);
+
+        Transport.showAllTransports();
     }
 }

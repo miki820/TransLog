@@ -25,8 +25,11 @@ public abstract class Vehicle {
     // List as a class attribute to store all engines to prohibit engine sharing and to have an extent of all engines
     private static final List<Engine> allEngines = new ArrayList<>();
 
-    // List for all services for this vehicle
+    // List to store all services for this vehicle
     private List<VehicleService> vehicleServices = new ArrayList<>();
+
+    // List to store all transports
+    private List<Transport> transports = new ArrayList<>();
 
     public Vehicle(String brand, String model, String licencePlateNumber, String... functions) {
         this.brand = brand;
@@ -70,7 +73,7 @@ public abstract class Vehicle {
     }
 
     private static void addVehicle(Vehicle vehicle) {
-        allVehicles.add((Vehicle) vehicle);
+        allVehicles.add(vehicle);
         licencePlateNumberSet.add(vehicle.getLicencePlateNumber());
     }
 
@@ -138,7 +141,7 @@ public abstract class Vehicle {
 
     public abstract void repair();
 
-    public void startRepair(){
+    public void startRepair() {
         if (underRepair) {
             throw new IllegalStateException("Vehicle is already under repair");
         }
@@ -146,18 +149,18 @@ public abstract class Vehicle {
         System.out.println("Vehicle is now under repair");
     }
 
-    public void simulateRepairProcess(long duration, TimeUnit timeUnit){
-        try{
+    public void simulateRepairProcess(long duration, TimeUnit timeUnit) {
+        try {
             System.out.println("Repairing: " + brand + " " + model);
             Thread.sleep(timeUnit.toMillis(duration));
             System.out.println("Vehicle repair completed.");
-        } catch (InterruptedException e){
+        } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             System.err.println("Interrupted while repairing vehicle.");
         }
     }
 
-    public void endRepair(){
+    public void endRepair() {
         if (!underRepair) {
             throw new IllegalStateException("Vehicle is not under repair");
         }
@@ -171,12 +174,42 @@ public abstract class Vehicle {
         }
     }
 
-    public void addVehicleService(VehicleService vehicleService){
+    public void addVehicleService(VehicleService vehicleService) {
         vehicleServices.add(vehicleService);
     }
 
     public List<VehicleService> getVehicleServices() {
         return vehicleServices;
+    }
+
+    public void assignTransport(Transport transport) {
+        if (!transports.contains(transport)) {
+            transports.add(transport);
+            if (transport.getVehicle1() == null) {
+                transport.setVehicle2(this);
+            } else if (transport.getVehicle2() == null) {
+                transport.setVehicle1(this);
+            } else {
+                throw new IllegalArgumentException("Transport already has two vehicles assigned");
+            }
+        }
+    }
+
+    public void removeTransport(Transport transport) {
+        if (!transports.contains(transport)) {
+            throw new IllegalArgumentException("There is no such transport assigned to this vehicle");
+        } else {
+            transports.remove(transport);
+            if (transport.getVehicle1() == this) {
+                transport.setVehicle1(null);
+            } else if (transport.getVehicle2() == this) {
+                transport.setVehicle2(null);
+            }
+        }
+    }
+
+    public List<Transport> getTransports() {
+        return transports;
     }
 
     public String getBrand() {
