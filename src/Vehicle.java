@@ -25,6 +25,9 @@ public abstract class Vehicle {
     // List as a class attribute to store all engines to prohibit engine sharing and to have an extent of all engines
     private static final List<Engine> allEngines = new ArrayList<>();
 
+    // List for all services for this vehicle
+    private List<VehicleService> vehicleServices = new ArrayList<>();
+
     public Vehicle(String brand, String model, String licencePlateNumber, String... functions) {
         this.brand = brand;
         this.model = model;
@@ -35,8 +38,8 @@ public abstract class Vehicle {
         for (String function : functions) {
             addFunction(function);
         }
-        addVehicle(this);
         this.underRepair = false;
+        addVehicle(this);
     }
 
     // Method that adds engine to a vehicle
@@ -166,6 +169,14 @@ public abstract class Vehicle {
         if (underRepair) {
             throw new IllegalStateException("Vehicle is under repair and cannot be used.");
         }
+    }
+
+    public void addVehicleService(VehicleService vehicleService){
+        vehicleServices.add(vehicleService);
+    }
+
+    public List<VehicleService> getVehicleServices() {
+        return vehicleServices;
     }
 
     public String getBrand() {
