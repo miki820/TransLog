@@ -11,4 +11,10 @@ public class OfficeWorker extends Worker {
     public double countSalary() {
         return position.equals("Dyrektor") ? 2000 : 1000;
     }
+
+    @Override
+    public String toString() {
+        return "OfficeWorker: " + super.toString() +
+                "Position: " + position;
+    }
 }

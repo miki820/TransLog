@@ -18,5 +18,10 @@ public class Main {
         OfficeWorker officeWorker = new OfficeWorker("Adam", "Adach", LocalDate.of(2002, 10, 2), 1, "Lodziarnia", "Dyrektor");
         System.out.println(officeWorker.getAge());
 
+        Worker mechanic = Worker.createMechanic("Bartek", "Wąski", LocalDate.of(2002, 10, 2), 1, "Lodziarnia", "trucks");
+        System.out.println(mechanic);
+
+        Worker driver = Worker.createDriver("Rafal", "Malachowski", LocalDate.of(2002, 10, 2), 1, "Lodziarnia", 2);
+        System.out.println(driver);
     }
 }

@@ -167,4 +167,26 @@ public abstract class Worker {
             throw new IllegalArgumentException("This Worker is not a Driver");
         }
     }
+
+    @Override
+    public String toString() {
+        String type = "Worker";
+        if (employeeType.contains(EmployeeType.DRIVER) && employeeType.contains(EmployeeType.MECHANIC)) {
+            type = "DriverMechanic";
+        } else if (employeeType.contains(EmployeeType.DRIVER)) {
+            type = "Driver";
+        } else if (employeeType.contains(EmployeeType.MECHANIC)) {
+            type = "Mechanic";
+        }
+
+        return  "Type: " + type +
+                ", Name: " + name +
+                ", Surname: " + surname +
+                ", BirthDate: " + birthDate +
+                ", Age: " + age +
+                ", Seniority: " + seniority +
+                ", PreviousJob: " + previousJob.orElse("None") +
+                ", Specialization: " + (employeeType.contains(EmployeeType.MECHANIC) ? specialization : "None") +
+                ", DrivingLicenseNumber: " + (employeeType.contains(EmployeeType.DRIVER) ? drivingLicenseNumber : "None, ");
+    }
 }
