@@ -32,6 +32,9 @@ public abstract class Worker {
         this.surname = surname;
         this.birthDate = birthDate;
         this.age = Period.between(this.birthDate, LocalDate.now()).getYears();
+        if (this.age < 18) {
+            throw new IllegalArgumentException("Age must be at least 18 years.");
+        }
         this.seniority = seniority;
         this.previousJob = Optional.ofNullable(previousJob);
     }
@@ -101,6 +104,10 @@ public abstract class Worker {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+        this.age = Period.between(this.birthDate, LocalDate.now()).getYears();
+        if (this.age < 18) {
+            throw new IllegalArgumentException("Age must be at least 18 years.");
+        }
     }
 
     public int getAge() {
