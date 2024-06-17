@@ -6,16 +6,25 @@ public class Service {
     private int price;
     private String description;
 
+    // Extent to store all Services
+    private static List<Service> allServices = new ArrayList<>();
+
     // List for all serviced vehicles
     private List<VehicleService> servicedVehicles = new ArrayList<>();
 
     public Service(int price, String description) {
         this.price = price;
         this.description = description;
+
+        addService(this);
     }
 
     public void addVehicleService(VehicleService vehicleService){
         servicedVehicles.add(vehicleService);
+    }
+
+    private static void addService(Service service) {
+        allServices.add(service);
     }
 
     public List<VehicleService> getServicedVehicles() {
