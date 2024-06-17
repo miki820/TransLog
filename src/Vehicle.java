@@ -183,33 +183,19 @@ public abstract class Vehicle {
     }
 
     public void assignTransport(Transport transport) {
-        if (transport.getVehicle1() != null && transport.getVehicle2() != null) {
-            throw new IllegalArgumentException("This transport has already two vehicles assigned");
-        } else if (!transports.contains(transport)) {
-            transports.add(transport);
-            if(transport.getVehicle1() == null){
-                transport.setVehicle(this);
-            } else if (transport.getVehicle2() == null){
-                transport.setVehicle(this);
+        if (!this.transports.contains(transport)) {
+            this.transports.add(transport);
+            if (!transport.getVehicles().contains(this)) {
+                transport.addVehicle(this);
             }
-        } else {
-            throw new IllegalArgumentException("This vehicle is already assigned to this transport");
         }
     }
 
     public void removeTransport(Transport transport) {
-        if (transport == null) {
-            throw new IllegalArgumentException("Transport cannot be null");
-        } else {
-            if (!transports.contains(transport)) {
-                throw new IllegalArgumentException("There is no such transport assigned to this vehicle");
-            } else {
-                transports.remove(transport);
-                if (transport.getVehicle1() == this) {
-                    transport.removeVehicle(transport.getVehicle1());
-                } else if (transport.getVehicle2() == this) {
-                    transport.removeVehicle(transport.getVehicle2());
-                }
+        if (this.transports.contains(transport)){
+            this.transports.remove(transport);
+            if(transport.getVehicles().contains(this)){
+                transport.removeVehicle(this);
             }
         }
     }
