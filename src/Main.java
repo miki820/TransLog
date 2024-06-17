@@ -15,13 +15,15 @@ public class Main {
 
         Transport transport = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), vehicleList);
 
+        Branch branch = new Branch("Główna", "WWa");
+
         OfficeWorker officeWorker = new OfficeWorker("Adam", "Adach", LocalDate.of(2002, 10, 2), 1, "Lodziarnia", "Dyrektor");
         System.out.println(officeWorker);
 
-        Worker mechanic = Worker.createMechanic("Bartek", "Wąski", LocalDate.of(2002, 10, 2), 1, "Lodziarnia", "trucks");
+        Worker mechanic = Worker.createMechanic("Bartek", "Wąski", LocalDate.of(2002, 10, 2), 1, "Lodziarnia", "trucks", branch);
         System.out.println(mechanic);
 
-        Worker driver = Worker.createDriver("Rafal", "Malachowski", LocalDate.of(2002, 10, 2), 1, "Lodziarnia", 2);
+        Worker driver = Worker.createDriver("Rafal", "Malachowski", LocalDate.of(2002, 10, 2), 1, "Lodziarnia", 2, branch);
         System.out.println(driver);
     }
 }

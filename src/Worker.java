@@ -25,10 +25,13 @@ public abstract class Worker {
     // Attribute for Driver class
     private int drivingLicenseNumber;
 
+    // Attribute for Branch
+    private Branch branch;
+
     private static List<Worker> allWorkers = new ArrayList<>();
 
     // Constructor with previous job
-    public Worker(String name, String surname, LocalDate birthDate, int seniority, String previousJob) {
+    public Worker(String name, String surname, LocalDate birthDate, int seniority, String previousJob, Branch branch) {
         this.name = name;
         this.surname = surname;
         this.birthDate = birthDate;
@@ -38,12 +41,16 @@ public abstract class Worker {
         }
         this.seniority = seniority;
         this.previousJob = Optional.ofNullable(previousJob);
+        this.branch = branch;
 
         allWorkers.add(this);
+        if (branch != null) {
+            branch.addWorker(this);
+        }
     }
 
-    public static Worker createDriver(String name, String surname, LocalDate birthDate, int seniority, String previousJob, int drivingLicenseNumber) {
-        Worker worker = new Worker(name, surname, birthDate, seniority, previousJob){
+    public static Worker createDriver(String name, String surname, LocalDate birthDate, int seniority, String previousJob, int drivingLicenseNumber, Branch branch) {
+        Worker worker = new Worker(name, surname, birthDate, seniority, previousJob, branch){
             @Override
             public double countSalary() {
                 return getDrivingLicenseNumber() * 1000;
@@ -53,11 +60,14 @@ public abstract class Worker {
         worker.setDrivingLicenseNumber(drivingLicenseNumber);
 
         allWorkers.add(worker);
+        if (branch != null) {
+            branch.addWorker(worker);
+        }
         return worker;
     }
 
-    public static Worker createMechanic(String name, String surname, LocalDate birthDate, int seniority, String previousJob, String specialization){
-        Worker worker = new Worker(name, surname, birthDate, seniority, previousJob){
+    public static Worker createMechanic(String name, String surname, LocalDate birthDate, int seniority, String previousJob, String specialization, Branch branch){
+        Worker worker = new Worker(name, surname, birthDate, seniority, previousJob, branch){
             @Override
             public double countSalary() {
                 return getSpecialization().equals("trucks") ? 2000 : 1000;
@@ -67,11 +77,14 @@ public abstract class Worker {
         worker.setSpecialization(specialization);
 
         allWorkers.add(worker);
+        if (branch != null) {
+            branch.addWorker(worker);
+        }
         return worker;
     }
     
-    public static Worker createDriverMechanic(String name, String surname, LocalDate birthDate, int seniority, String previousJob, int drivingLicenseNumber, String specialization){
-        Worker worker = new Worker(name, surname, birthDate, seniority, previousJob){
+    public static Worker createDriverMechanic(String name, String surname, LocalDate birthDate, int seniority, String previousJob, int drivingLicenseNumber, String specialization, Branch branch){
+        Worker worker = new Worker(name, surname, birthDate, seniority, previousJob, branch){
             @Override
             public double countSalary() {
                 return getSpecialization().equals("trucks") ? 2000 * getDrivingLicenseNumber() : 1000 * getDrivingLicenseNumber();
@@ -90,6 +103,9 @@ public abstract class Worker {
 
     public static void removeWorker(Worker worker) {
         allWorkers.remove(worker);
+        if (worker.branch != null) {
+            worker.branch.removeWorker(worker);
+        }
     }
 
     public String getName() {
