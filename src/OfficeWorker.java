@@ -1,9 +1,12 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class OfficeWorker extends Worker {
+public class OfficeWorker extends Worker implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String position;
-    public OfficeWorker(String name, String surname, LocalDate birthDate, int seniority, String previousJob, String position) {
-        super(name, surname, birthDate, seniority, previousJob);
+    public OfficeWorker(String name, String surname, LocalDate birthDate, int seniority, String previousJob, Branch branch, String position) {
+        super(name, surname, birthDate, seniority, previousJob, branch);
         this.position = position;
     }
 

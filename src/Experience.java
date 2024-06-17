@@ -1,12 +1,19 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-public class Experience {
+public class Experience implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final Worker worker;
     private Senior senior;
     private Junior junior;
-    private static final List<Senior> allSeniors = new ArrayList<>();
-    private static final List<Junior> allJuniors = new ArrayList<>();
+    private static List<Senior> allSeniors = new ArrayList<>();
+    private static List<Junior> allJuniors = new ArrayList<>();
 
     public Experience(Worker worker) {
         this.worker = worker;
@@ -84,6 +91,19 @@ public class Experience {
             allJuniors.remove(this.junior);
             junior = null;
         }
+    }
+
+
+
+    // Custom serialization for Experience
+    public static void writeExtent(ObjectOutputStream stream) throws IOException {
+        stream.writeObject(allJuniors);
+        stream.writeObject(allSeniors);
+    }
+
+    public static void readExtent(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        allJuniors = (ArrayList<Junior>) stream.readObject();
+        allSeniors = (ArrayList<Senior>) stream.readObject();
     }
 
     @Override

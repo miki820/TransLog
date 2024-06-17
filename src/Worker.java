@@ -1,10 +1,16 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
 enum EmployeeType{WORKER, DRIVER, MECHANIC}
 
-public abstract class Worker {
+public abstract class Worker implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String name;
     private String surname;
 
@@ -13,7 +19,8 @@ public abstract class Worker {
     //Derived attribute
     private int age;
     private int seniority;
-    private Optional<String> previousJob;
+    private transient Optional<String> previousJob;
+    private String previousJobSerialized;
     private EnumSet<EmployeeType> employeeType = EnumSet.of(EmployeeType.WORKER);
 
     // Attribute for Mechanic class
@@ -34,7 +41,7 @@ public abstract class Worker {
     private List<Vehicle> drivenVehicles = new ArrayList<>();
     private List<Vehicle> repairedVehicles = new ArrayList<>();
 
-    private Worker(String name, String surname, LocalDate birthDate, int seniority, String previousJob, Branch branch) {
+    public Worker(String name, String surname, LocalDate birthDate, int seniority, String previousJob, Branch branch) {
         this.name = name;
         this.surname = surname;
         this.birthDate = birthDate;
@@ -52,6 +59,7 @@ public abstract class Worker {
         }
 
         this.experience = new Experience(this);
+        allExperiences.add(experience);
     }
 
     public static Worker createDriver(String name, String surname, LocalDate birthDate, int seniority, String previousJob, int drivingLicenseNumber, Branch branch) {
@@ -64,7 +72,6 @@ public abstract class Worker {
         worker.employeeType.add(EmployeeType.DRIVER);
         worker.setDrivingLicenseNumber(drivingLicenseNumber);
 
-        allWorkers.add(worker);
         if (branch != null) {
             branch.addWorker(worker);
         }
@@ -81,7 +88,6 @@ public abstract class Worker {
         worker.employeeType.add(EmployeeType.MECHANIC);
         worker.setSpecialization(specialization);
 
-        allWorkers.add(worker);
         if (branch != null) {
             branch.addWorker(worker);
         }
@@ -100,7 +106,6 @@ public abstract class Worker {
         worker.setDrivingLicenseNumber(drivingLicenseNumber);
         worker.setSpecialization(specialization);
 
-        allWorkers.add(worker);
         return worker;
     }
 
@@ -130,23 +135,6 @@ public abstract class Worker {
     public Experience getExperience() {
         return experience;
     }
-
-    public static void showAllWorkers() {
-        System.out.println("Extent of the class: " + Worker.class.getName());
-
-        for (Worker worker : allWorkers) {
-            System.out.println(worker);
-        }
-    }
-
-    public static void showAllExperiences() {
-        System.out.println("Extent of the class: " + Experience.class.getName());
-
-        for (Experience experience : allExperiences) {
-            System.out.println(experience);
-        }
-    }
-
 
     public abstract double countSalary();
 
@@ -281,6 +269,50 @@ public abstract class Worker {
         }
     }
 
+    public static void showAllWorkers() {
+        System.out.println("Extent of the class: " + Worker.class.getName());
+
+        for (Worker worker : allWorkers) {
+            System.out.println(worker);
+        }
+    }
+
+    public static void showAllExperiences() {
+        System.out.println("Extent of the class: " + Experience.class.getName());
+
+        for (Experience experience : allExperiences) {
+            System.out.println(experience);
+        }
+    }
+
+    //Methods to handle optional attribute
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        previousJobSerialized = previousJob.orElse(null);
+        oos.defaultWriteObject();
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        previousJob = Optional.ofNullable(previousJobSerialized);
+    }
+
+    public static void writeExtent(ObjectOutputStream stream) throws IOException {
+        stream.writeObject(allWorkers);
+        stream.writeObject(allExperiences);
+    }
+
+    public static void readExtent(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        allWorkers = (ArrayList<Worker>) stream.readObject();
+        allExperiences = (Set<Experience>) stream.readObject();
+    }
+
+    public static List<Worker> getAllWorkers() {
+        return allWorkers;
+    }
+
+    public static Set<Experience> getAllExperiences() {
+        return allExperiences;
+    }
 
     @Override
     public String toString() {

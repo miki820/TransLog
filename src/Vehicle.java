@@ -1,9 +1,17 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public abstract class Vehicle {
+public abstract class Vehicle implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final String brand;
     private final String model;
+
+    //Flag that informs if vehicle is under repair
     private boolean underRepair;
 
     // Set to check if Licence plate number is unique
@@ -17,20 +25,21 @@ public abstract class Vehicle {
     private Engine engine;
 
     // Extent to store all Vehicles
-    private static final List<Vehicle> allVehicles = new ArrayList<>();
+    private static List<Vehicle> allVehicles = new ArrayList<>();
 
     // List as a class attribute to store all engines to prohibit engine sharing and to have an extent of all engines
-    private static final List<Engine> allEngines = new ArrayList<>();
+    private static List<Engine> allEngines = new ArrayList<>();
 
     // List to store all services for this vehicle
     private List<VehicleService> vehicleServices = new ArrayList<>();
 
-    // List to store all transports
+    // List to store all assigned transports
     private List<Transport> transports = new ArrayList<>();
 
     // Map to do qualification association
     private Map<String, Transport> transportsQualif = new TreeMap<>();
 
+    // Lists to store all assigned drivers and mechanics to vehicle
     private List<Worker> allDrivers = new ArrayList<>();
     private List<Worker> allMechanics = new ArrayList<>();
 
@@ -131,6 +140,16 @@ public abstract class Vehicle {
         for (Engine engine : allEngines) {
             System.out.println(engine);
         }
+    }
+
+    public static void writeExtent(ObjectOutputStream stream) throws IOException {
+        stream.writeObject(allVehicles);
+        stream.writeObject(allEngines);
+    }
+
+    public static void readExtent(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        allVehicles = (ArrayList<Vehicle>) stream.readObject();
+        allEngines = (ArrayList<Engine>) stream.readObject();
     }
 
     public abstract void repair();
@@ -298,6 +317,10 @@ public abstract class Vehicle {
             }
         }
         return deliveryTrucks;
+    }
+
+    public List<Worker> getAllMechanics() {
+        return allMechanics;
     }
 
     @Override

@@ -1,6 +1,9 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class VehicleService {
+public class VehicleService implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final Vehicle vehicle;
     private final Service service;
 

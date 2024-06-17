@@ -1,6 +1,9 @@
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
-public class DeliveryTruck extends Vehicle {
+public class DeliveryTruck extends Vehicle implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final int maxCargoVolume;
 
     public DeliveryTruck(String brand, String model, String licencePlateNumber, int maxCargoVolume, String... functions) {
@@ -30,7 +33,9 @@ public class DeliveryTruck extends Vehicle {
 
     @Override
     public void repair() {
-        startRepair();
+        for (int i = 0; i < this.getAllMechanics().size(); i++) {
+            startRepair(this.getAllMechanics().get(i));
+        }
         simulateRepairProcess(3000, TimeUnit.MILLISECONDS);
         endRepair();
     }

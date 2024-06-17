@@ -1,12 +1,16 @@
-public class Junior {
+import java.io.Serializable;
+
+public class Junior implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int trainingHoursCompleted;
     private Experience experience;
 
-    public Junior(Experience experience, int trainingHoursCompleted) {
+    private Junior(Experience experience, int trainingHoursCompleted) {
+        this.experience = experience;
         this.trainingHoursCompleted = trainingHoursCompleted;
     }
 
-    public static Junior createJunior(Experience experience, int salarySupplement) throws Exception {
+    public static Junior createJunior(Experience experience, int trainingHoursCompleted) throws Exception {
         if (experience == null) {
             throw new Exception("Experience does not exist");
         }
@@ -16,7 +20,7 @@ public class Junior {
             throw new Exception("This experience already has an experience.");
         }
 
-        Junior junior = new Junior(experience, salarySupplement);
+        Junior junior = new Junior(experience, trainingHoursCompleted);
         experience.addJunior(junior);
 
         return junior;

@@ -1,8 +1,13 @@
-public class Senior {
+import java.io.Serializable;
+
+public class Senior implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private int salarySupplement;
     private Experience experience;
 
     private Senior(Experience experience, int salarySupplement) {
+        this.experience = experience;
         this.salarySupplement = salarySupplement;
     }
 

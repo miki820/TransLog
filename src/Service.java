@@ -1,8 +1,11 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Service {
+public class Service implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private int price;
     private String description;
 

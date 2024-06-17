@@ -1,11 +1,16 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.*;
 
-public class Branch {
+public class Branch implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String name;
     private String address;
     public static int openHours = 10;
     public static int closeHours = 18;
-    private static Set<Branch> allBranches = new TreeSet<>((o1, o2) -> o2.getName().compareTo(o1.getName()));
+    private static Set<Branch> allBranches = new TreeSet<>(new BranchComparator());
     private List<Worker> workers = new ArrayList<>();
 
     public Branch(String name, String address) {
@@ -46,6 +51,36 @@ public class Branch {
 
     public String getName() {
         return name;
+    }
+
+    public static void showAllBranches() {
+        System.out.println("Extent of the class: " + Branch.class.getName());
+
+        for (Branch branch : allBranches) {
+            System.out.println(branch);
+        }
+    }
+
+    // Default comparator is not serializable
+    private static class BranchComparator implements Comparator<Branch>, Serializable {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public int compare(Branch o1, Branch o2) {
+            return o2.getName().compareTo(o1.getName());
+        }
+    }
+
+    public static void writeExtent(ObjectOutputStream stream) throws IOException {
+        stream.writeObject(allBranches);
+    }
+
+    public static void readExtent(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        allBranches = (Set<Branch>) stream.readObject();
+    }
+
+    public static Set<Branch> getAllBranches() {
+        return allBranches;
     }
 
     @Override
