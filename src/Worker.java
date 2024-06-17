@@ -1,9 +1,6 @@
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 enum EmployeeType{WORKER, DRIVER, MECHANIC}
 
@@ -28,7 +25,11 @@ public abstract class Worker {
     // Attribute for Branch
     private Branch branch;
 
+    // Each worker can have one experience
+    private Experience experience;
+
     private static List<Worker> allWorkers = new ArrayList<>();
+    private static Set<Experience> allExperiences = new HashSet<>();
 
     // Constructor with previous job
     public Worker(String name, String surname, LocalDate birthDate, int seniority, String previousJob, Branch branch) {
@@ -98,6 +99,53 @@ public abstract class Worker {
         allWorkers.add(worker);
         return worker;
     }
+
+    // Method that adds experience to a worker
+    public void addExperience(Experience experience) throws Exception {
+        // Check if the worker already has an experience
+        if (this.experience == null) {
+            // Check if the experience has been already added to any worker
+            if (allExperiences.contains(experience)) {
+                throw new Exception("This experience is already connected with some worker.");
+            }
+
+            // We add an experience and add it to set of all experiences so that we know it is used
+            this.experience = experience;
+            allExperiences.add(experience);
+
+        } else {
+            throw new Exception("Experience already exists for this worker");
+        }
+    }
+
+    // Method that removes only experience from a worker
+    public void removeExperience() {
+        if (this.experience != null) {
+            allExperiences.remove(this.experience);
+            experience = null;
+        }
+    }
+
+    public Experience getExperience() {
+        return experience;
+    }
+
+    public static void showAllWorkers() {
+        System.out.println("Extent of the class: " + Worker.class.getName());
+
+        for (Worker worker : allWorkers) {
+            System.out.println(worker);
+        }
+    }
+
+    public static void showAllExperiences() {
+        System.out.println("Extent of the class: " + Experience.class.getName());
+
+        for (Experience experience : allExperiences) {
+            System.out.println(experience);
+        }
+    }
+
 
     public abstract double countSalary();
 
@@ -213,6 +261,7 @@ public abstract class Worker {
                 ", Seniority: " + seniority +
                 ", PreviousJob: " + previousJob.orElse("None") +
                 ", Specialization: " + (employeeType.contains(EmployeeType.MECHANIC) ? specialization : "None") +
-                ", DrivingLicenseNumber: " + (employeeType.contains(EmployeeType.DRIVER) ? drivingLicenseNumber : "None");
+                ", DrivingLicenseNumber: " + (employeeType.contains(EmployeeType.DRIVER) ? drivingLicenseNumber : "None") +
+                ", Branch: " + (branch != null ? branch.getName() : "None");
     }
 }
