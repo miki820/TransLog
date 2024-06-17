@@ -31,8 +31,10 @@ public abstract class Worker {
     private static List<Worker> allWorkers = new ArrayList<>();
     private static Set<Experience> allExperiences = new HashSet<>();
 
-    // Constructor with previous job
-    public Worker(String name, String surname, LocalDate birthDate, int seniority, String previousJob, Branch branch) {
+    private List<Vehicle> drivenVehicles = new ArrayList<>();
+    private List<Vehicle> repairedVehicles = new ArrayList<>();
+
+    private Worker(String name, String surname, LocalDate birthDate, int seniority, String previousJob, Branch branch) {
         this.name = name;
         this.surname = surname;
         this.birthDate = birthDate;
@@ -211,6 +213,10 @@ public abstract class Worker {
         this.previousJob = Optional.of(previousJob);
     }
 
+    public EnumSet<EmployeeType> getEmployeeType() {
+        return employeeType;
+    }
+
     public String getSpecialization() {
         if(employeeType.contains(EmployeeType.MECHANIC)){
             return specialization;
@@ -240,6 +246,41 @@ public abstract class Worker {
             throw new IllegalArgumentException("This Worker is not a Driver");
         }
     }
+
+    public void addDrivenVehicle(Vehicle vehicle){
+        if (!employeeType.contains(EmployeeType.DRIVER)) {
+            throw new IllegalStateException("This worker is not a driver.");
+        }
+        if(!drivenVehicles.contains(vehicle)){
+            drivenVehicles.add(vehicle);
+            vehicle.addDriver(this);
+        }
+    }
+
+    public void removeDrivenVehicle(Vehicle vehicle) {
+        if (drivenVehicles.contains(vehicle)) {
+            drivenVehicles.remove(vehicle);
+            vehicle.removeDriver(this);
+        }
+    }
+
+    public void addRepairedVehicle(Vehicle vehicle){
+        if (!employeeType.contains(EmployeeType.MECHANIC)) {
+            throw new IllegalStateException("This worker is not a mechanic.");
+        }
+        if(!repairedVehicles.contains(vehicle)){
+            repairedVehicles.add(vehicle);
+            vehicle.addMechanic(this);
+        }
+    }
+
+    public void removeRepairedVehicle(Vehicle vehicle) {
+        if (repairedVehicles.contains(vehicle)) {
+            repairedVehicles.remove(vehicle);
+            vehicle.removeMechanic(this);
+        }
+    }
+
 
     @Override
     public String toString() {

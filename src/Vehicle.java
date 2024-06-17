@@ -31,6 +31,9 @@ public abstract class Vehicle {
     // Map to do qualification association
     private Map<String, Transport> transportsQualif = new TreeMap<>();
 
+    private List<Worker> allDrivers = new ArrayList<>();
+    private List<Worker> allMechanics = new ArrayList<>();
+
     public Vehicle(String brand, String model, String licencePlateNumber, String... functions) {
         this.brand = brand;
         this.model = model;
@@ -132,12 +135,22 @@ public abstract class Vehicle {
 
     public abstract void repair();
 
-    public void startRepair() {
+    public void startRepair(Worker mechanic) {
         if (underRepair) {
             throw new IllegalStateException("Vehicle is already under repair");
         }
+        if (allMechanics.size() >= 2) {
+            throw new IllegalStateException("Vehicle cannot be repaired by more than 2 mechanics.");
+        }
+        if (!allMechanics.contains(mechanic)) {
+            allMechanics.add(mechanic);
+        }
+        if (mechanic == null || !mechanic.getEmployeeType().contains(EmployeeType.MECHANIC)) {
+            throw new IllegalArgumentException("A valid mechanic must be assigned to start the repair");
+        }
         underRepair = true;
-        System.out.println("Vehicle is now under repair");
+        mechanic.addRepairedVehicle(this);
+        System.out.println("Vehicle is now under repair by " + mechanic.getName());
     }
 
     public void simulateRepairProcess(long duration, TimeUnit timeUnit) {
@@ -156,6 +169,9 @@ public abstract class Vehicle {
             throw new IllegalStateException("Vehicle is not under repair");
         }
         underRepair = false;
+        for (Worker mechanic : allMechanics) {
+            mechanic.removeRepairedVehicle(this);
+        }
         System.out.println("Vehicle repair completed");
     }
 
@@ -199,6 +215,40 @@ public abstract class Vehicle {
             }
         } else {
             throw new IllegalArgumentException("Transport with id: " + id + " not found.");
+        }
+    }
+
+    public void addDriver(Worker driver){
+        if (allDrivers.size() >= 2) {
+            throw new IllegalStateException("Vehicle cannot have more than 2 drivers.");
+        }
+        if(!allDrivers.contains(driver)){
+            allDrivers.add(driver);
+            driver.addDrivenVehicle(this);
+        }
+    }
+
+    public void removeDriver(Worker driver) {
+        if (allDrivers.contains(driver)) {
+            allDrivers.remove(driver);
+            driver.removeDrivenVehicle(this);
+        }
+    }
+
+    public void addMechanic(Worker mechanic){
+        if (allMechanics.size() >= 2) {
+            throw new IllegalStateException("Vehicle cannot be repaired by more than 2 mechanics.");
+        }
+        if(!allMechanics.contains(mechanic)){
+            allMechanics.add(mechanic);
+            mechanic.addRepairedVehicle(this);
+        }
+    }
+
+    public void removeMechanic(Worker mechanic) {
+        if (allMechanics.contains(mechanic)) {
+            allMechanics.remove(mechanic);
+            mechanic.removeRepairedVehicle(this);
         }
     }
 
