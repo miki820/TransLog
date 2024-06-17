@@ -48,6 +48,8 @@ public abstract class Worker {
         if (branch != null) {
             branch.addWorker(this);
         }
+
+        this.experience = new Experience(this);
     }
 
     public static Worker createDriver(String name, String surname, LocalDate birthDate, int seniority, String previousJob, int drivingLicenseNumber, Branch branch) {
@@ -102,14 +104,11 @@ public abstract class Worker {
 
     // Method that adds experience to a worker
     public void addExperience(Experience experience) throws Exception {
-        // Check if the worker already has an experience
         if (this.experience == null) {
-            // Check if the experience has been already added to any worker
             if (allExperiences.contains(experience)) {
                 throw new Exception("This experience is already connected with some worker.");
             }
 
-            // We add an experience and add it to set of all experiences so that we know it is used
             this.experience = experience;
             allExperiences.add(experience);
 
