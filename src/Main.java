@@ -24,11 +24,11 @@ public class Main {
 
         Transport.showAllTransports();
 
-        truck.assignTransport(transport);
+        truck.addTransportQualif(transport);
 
         Transport.showAllTransports();
 
-        truck.removeTransport(transport);
+        truck.removeTransportQualif(transport.getId());
 
         Transport.showAllTransports();
 

@@ -1,8 +1,10 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Transport {
+    private String id;
     private String startingPoint;
     private String endingPoint;
     private String cargo;
@@ -15,6 +17,7 @@ public class Transport {
     private boolean isBeingRemoved = false;
 
     public Transport(String startingPoint, String endingPoint, String cargo, LocalDate transportDate, List<Vehicle> vehicles) {
+        this.id = UUID.randomUUID().toString();
         if (vehicles == null || vehicles.isEmpty() || vehicles.size() > 2) {
             throw new IllegalArgumentException("Transport must have at least 1 and at most 2 vehicles.");
         }
@@ -26,7 +29,7 @@ public class Transport {
 
         for (Vehicle vehicle : vehicles) {
             if (!vehicle.getTransports().contains(this)) {
-                vehicle.assignTransport(this);
+                vehicle.addTransportQualif(this);
             }
         }
 
@@ -40,19 +43,19 @@ public class Transport {
         if (!this.vehicles.contains(vehicle)) {
             this.vehicles.add(vehicle);
             if (!vehicle.getTransports().contains(this)) {
-                vehicle.assignTransport(this);
+                vehicle.addTransportQualif(this);
             }
         }
     }
 
-    public void removeVehicle(Vehicle vehicle) {
+    public void removeVehicle(Vehicle vehicle){
         if (this.vehicles.size() <= 1 && !isBeingRemoved) {
             throw new IllegalStateException("You can't delete vehicle because transport must have at least 1 vehicle.");
         }
         if (this.vehicles.contains(vehicle)) {
             this.vehicles.remove(vehicle);
             if (vehicle.getTransports().contains(this)) {
-                vehicle.removeTransport(this);
+                vehicle.removeTransportQualif(this.id);
             }
         }
     }
@@ -66,7 +69,7 @@ public class Transport {
         //New list to avoid ConcurrentModificationException
         for(Vehicle vehicle : new ArrayList<>(vehicles)) {
             if (vehicle.getTransports().contains(this)){
-                vehicle.removeTransport(this);
+                vehicle.removeTransportQualif(this.getId());
             }
         }
         allTransports.remove(this);
@@ -79,6 +82,10 @@ public class Transport {
         }
     }
 
+    public String getId() {
+        return id;
+    }
+
     public List<Vehicle> getVehicles() {
         return vehicles;
     }
@@ -89,7 +96,8 @@ public class Transport {
         String vehicle2 = vehicles.size() == 2 ? vehicles.get(1).getBrand() + " " + vehicles.get(1).getLicencePlateNumber() : "No Vehicle";
 
         return "Transport: " +
-                "StartingPoint: " + startingPoint +
+                "ID: " + id +
+                ", StartingPoint: " + startingPoint +
                 ", EndingPoint: " + endingPoint +
                 ", Cargo: " + cargo +
                 ", TransportDate: " + transportDate +

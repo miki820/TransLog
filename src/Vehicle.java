@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public abstract class Vehicle {
@@ -30,6 +27,9 @@ public abstract class Vehicle {
 
     // List to store all transports
     private List<Transport> transports = new ArrayList<>();
+
+    // Map to do qualification association
+    private Map<String, Transport> transportsQualif = new TreeMap<>();
 
     public Vehicle(String brand, String model, String licencePlateNumber, String... functions) {
         this.brand = brand;
@@ -89,11 +89,6 @@ public abstract class Vehicle {
 
     private static void remove(Vehicle vehicle) {
         allVehicles.remove(vehicle);
-    }
-
-    public static void clear() {
-        allVehicles.clear();
-        allEngines.clear();
     }
 
     private static boolean checkLicencePlateNumber(String licencePlateNumber) {
@@ -182,21 +177,32 @@ public abstract class Vehicle {
         return vehicleServices;
     }
 
-    public void assignTransport(Transport transport) {
-        if (!this.transports.contains(transport)) {
-            this.transports.add(transport);
-            if (!transport.getVehicles().contains(this)) {
-                transport.addVehicle(this);
+    public void addTransportQualif(Transport newTransport) {
+        if (!transportsQualif.containsKey(newTransport.getId())) {
+            transportsQualif.put(newTransport.getId(), newTransport);
+
+            if (!newTransport.getVehicles().contains(this)) {
+                newTransport.addVehicle(this);
             }
         }
     }
 
-    public void removeTransport(Transport transport) {
-        if (this.transports.contains(transport)){
-            this.transports.remove(transport);
-            if(transport.getVehicles().contains(this)){
+    public Transport findTransportQualif(String id) throws Exception {
+        if (transportsQualif.containsKey(id)) {
+            throw new Exception("Unable to find this transport: " + id);
+        }
+
+        return transportsQualif.get(id);
+    }
+
+    public void removeTransportQualif(String id){
+        if (transportsQualif.containsKey(id)) {
+            Transport transport = transportsQualif.remove(id);
+            if (transport.getVehicles().contains(this)) {
                 transport.removeVehicle(this);
             }
+        } else {
+            throw new IllegalArgumentException("Transport with id: " + id + " not found.");
         }
     }
 
