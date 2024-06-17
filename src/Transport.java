@@ -11,6 +11,9 @@ public class Transport {
     private static List<Transport> allTransports = new ArrayList<>();
     private List<Vehicle> vehicles = new ArrayList<>();
 
+    // Flag to indicate if the transport is being removed
+    private boolean isBeingRemoved = false;
+
     public Transport(String startingPoint, String endingPoint, String cargo, LocalDate transportDate, List<Vehicle> vehicles) {
         if (vehicles == null || vehicles.isEmpty() || vehicles.size() > 2) {
             throw new IllegalArgumentException("Transport must have at least 1 and at most 2 vehicles.");
@@ -43,7 +46,7 @@ public class Transport {
     }
 
     public void removeVehicle(Vehicle vehicle) {
-        if (this.vehicles.size() <= 1) {
+        if (this.vehicles.size() <= 1 && !isBeingRemoved) {
             throw new IllegalStateException("You can't delete vehicle because transport must have at least 1 vehicle.");
         }
         if (this.vehicles.contains(vehicle)) {
@@ -59,6 +62,13 @@ public class Transport {
     }
 
     public void removeTransport() {
+        isBeingRemoved = true;
+        //New list to avoid ConcurrentModificationException
+        for(Vehicle vehicle : new ArrayList<>(vehicles)) {
+            if (vehicle.getTransports().contains(this)){
+                vehicle.removeTransport(this);
+            }
+        }
         allTransports.remove(this);
     }
 

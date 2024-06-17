@@ -31,5 +31,11 @@ public class Main {
         truck.removeTransport(transport);
 
         Transport.showAllTransports();
+
+        transport.removeTransport();
+
+        Transport.showAllTransports();
+        System.out.println(truck.getTransports());
+        System.out.println(deliveryTruck.getTransports());
     }
 }
