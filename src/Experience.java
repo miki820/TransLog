@@ -66,7 +66,7 @@ public class Experience {
     public void addJunior(Junior junior){
         if(this.junior == null){
             if(this.senior != null) {
-                throw new IllegalStateException("Cannot set junior when Junior is already set.");
+                throw new IllegalStateException("Cannot set Junior when Senior is already set.");
             }
             if(allJuniors.contains(junior)){
                 throw new IllegalStateException("This junior is already connected with some experience.");
@@ -75,7 +75,7 @@ public class Experience {
             this.junior = junior;
             allJuniors.add(junior);
         } else {
-            throw new IllegalStateException("Senior junior exists in this Experience");
+            throw new IllegalStateException("Junior exists in this Experience");
         }
     }
 

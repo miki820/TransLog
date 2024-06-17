@@ -6,7 +6,7 @@ public class Senior {
         this.salarySupplement = salarySupplement;
     }
 
-    public static Experience createExperienced(Experience experience, int salarySupplement) throws Exception {
+    public static Senior createSenior(Experience experience, int salarySupplement) throws Exception {
         if (experience == null) {
             throw new Exception("Experience does not exist");
         }
@@ -19,7 +19,7 @@ public class Senior {
         Senior senior = new Senior(experience, salarySupplement);
         experience.addSenior(senior);
 
-        return experience;
+        return senior;
     }
 
     public int getSalarySupplement() {
