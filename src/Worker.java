@@ -1,6 +1,8 @@
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Optional;
 
 enum EmployeeType{WORKER, DRIVER, MECHANIC}
@@ -23,8 +25,7 @@ public abstract class Worker {
     // Attribute for Driver class
     private int drivingLicenseNumber;
 
-    /*private List<Driver> drivers;
-    private List<Mechanic> mechanics;*/
+    private static List<Worker> allWorkers = new ArrayList<>();
 
     // Constructor with previous job
     public Worker(String name, String surname, LocalDate birthDate, int seniority, String previousJob) {
@@ -37,6 +38,8 @@ public abstract class Worker {
         }
         this.seniority = seniority;
         this.previousJob = Optional.ofNullable(previousJob);
+
+        allWorkers.add(this);
     }
 
     public static Worker createDriver(String name, String surname, LocalDate birthDate, int seniority, String previousJob, int drivingLicenseNumber) {
@@ -49,6 +52,7 @@ public abstract class Worker {
         worker.employeeType.add(EmployeeType.DRIVER);
         worker.setDrivingLicenseNumber(drivingLicenseNumber);
 
+        allWorkers.add(worker);
         return worker;
     }
 
@@ -61,7 +65,8 @@ public abstract class Worker {
         };
         worker.employeeType.add(EmployeeType.MECHANIC);
         worker.setSpecialization(specialization);
-        
+
+        allWorkers.add(worker);
         return worker;
     }
     
@@ -77,10 +82,15 @@ public abstract class Worker {
         worker.setDrivingLicenseNumber(drivingLicenseNumber);
         worker.setSpecialization(specialization);
 
+        allWorkers.add(worker);
         return worker;
     }
 
     public abstract double countSalary();
+
+    public static void removeWorker(Worker worker) {
+        allWorkers.remove(worker);
+    }
 
     public String getName() {
         return name;
