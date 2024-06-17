@@ -15,6 +15,6 @@ public class OfficeWorker extends Worker {
     @Override
     public String toString() {
         return "OfficeWorker: " + super.toString() +
-                "Position: " + position;
+                ", Position: " + position;
     }
 }

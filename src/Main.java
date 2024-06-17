@@ -16,7 +16,7 @@ public class Main {
         Transport transport = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), vehicleList);
 
         OfficeWorker officeWorker = new OfficeWorker("Adam", "Adach", LocalDate.of(2002, 10, 2), 1, "Lodziarnia", "Dyrektor");
-        System.out.println(officeWorker.getAge());
+        System.out.println(officeWorker);
 
         Worker mechanic = Worker.createMechanic("Bartek", "Wąski", LocalDate.of(2002, 10, 2), 1, "Lodziarnia", "trucks");
         System.out.println(mechanic);

@@ -197,6 +197,6 @@ public abstract class Worker {
                 ", Seniority: " + seniority +
                 ", PreviousJob: " + previousJob.orElse("None") +
                 ", Specialization: " + (employeeType.contains(EmployeeType.MECHANIC) ? specialization : "None") +
-                ", DrivingLicenseNumber: " + (employeeType.contains(EmployeeType.DRIVER) ? drivingLicenseNumber : "None, ");
+                ", DrivingLicenseNumber: " + (employeeType.contains(EmployeeType.DRIVER) ? drivingLicenseNumber : "None");
     }
 }
