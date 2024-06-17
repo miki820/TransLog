@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -14,28 +15,8 @@ public class Main {
 
         Transport transport = new Transport("Wwa", "Wrocław", "ryby", LocalDate.now(), vehicleList);
 
-        Transport.showAllTransports();
+        OfficeWorker officeWorker = new OfficeWorker("Adam", "Adach", LocalDate.of(2002, 10, 2), 1, "Lodziarnia", "Dyrektor");
+        System.out.println(officeWorker.getAge());
 
-        transport.addVehicle(deliveryTruck);
-
-        Transport.showAllTransports();
-
-        transport.removeVehicle(truck);
-
-        Transport.showAllTransports();
-
-        truck.addTransportQualif(transport);
-
-        Transport.showAllTransports();
-
-        truck.removeTransportQualif(transport.getId());
-
-        Transport.showAllTransports();
-
-        transport.removeTransport();
-
-        Transport.showAllTransports();
-        System.out.println(truck.getTransports());
-        System.out.println(deliveryTruck.getTransports());
     }
 }

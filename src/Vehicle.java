@@ -81,14 +81,10 @@ public abstract class Vehicle {
     public static void removeVehicle(Vehicle vehicle) throws Exception {
         if (vehicle != null) {
             vehicle.removeEngine();
-            remove(vehicle);
+            allVehicles.remove(vehicle);
         } else {
             throw new Exception("This vehicle doesn't exists");
         }
-    }
-
-    private static void remove(Vehicle vehicle) {
-        allVehicles.remove(vehicle);
     }
 
     private static boolean checkLicencePlateNumber(String licencePlateNumber) {
