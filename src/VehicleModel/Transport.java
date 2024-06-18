@@ -12,14 +12,21 @@ import java.util.UUID;
 public class Transport implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String id;                    // Unique identifier for each transport
-    private String startingPoint;         // Starting point of the transport
-    private String endingPoint;           // Ending point of the transport
-    private String cargo;                 // Cargo being transported
-    private LocalDate transportDate;      // Date of the transport
+    // Unique identifier for each transport
+    private String id;
+    // Starting point of the transport
+    private String startingPoint;
+    // Ending point of the transport
+    private String endingPoint;
+    // Cargo being transported
+    private String cargo;
+    // Date of the transport
+    private LocalDate transportDate;
 
-    private static List<Transport> allTransports = new ArrayList<>();  // List to store all transports
-    private List<Vehicle> vehicles = new ArrayList<>();                // List to store vehicles assigned to this transport
+    // List to store all transports
+    private static List<Transport> allTransports = new ArrayList<>();
+    // List to store vehicles assigned to this transport
+    private List<Vehicle> vehicles = new ArrayList<>();
 
     // Flag to indicate if the transport is being removed
     private boolean isBeingRemoved = false;
