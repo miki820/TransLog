@@ -37,6 +37,7 @@ public class Main {
         SwingUtilities.invokeLater(() -> {
             AddTransportWindow frame = new AddTransportWindow();
             frame.setVisible(true);
+
         });
     }
 }
