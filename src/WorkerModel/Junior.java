@@ -1,3 +1,5 @@
+package WorkerModel;
+
 import java.io.Serializable;
 
 public class Junior implements Serializable {
@@ -12,7 +14,7 @@ public class Junior implements Serializable {
 
     public static Junior createJunior(Experience experience, int trainingHoursCompleted) throws Exception {
         if (experience == null) {
-            throw new Exception("Experience does not exist");
+            throw new Exception("WorkerModel.Experience does not exist");
         }
 
         // Check if the experience already has an experience

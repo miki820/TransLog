@@ -1,3 +1,5 @@
+package VehicleModel;
+
 import java.io.Serializable;
 
 public class Engine implements Serializable {
@@ -12,7 +14,7 @@ public class Engine implements Serializable {
         this.name = name;
     }
 
-    // Create Engine but first vehicle must exist because part can't exist on its own
+    // Create VehicleModel.Engine but first vehicle must exist because part can't exist on its own
     public static Engine createEngine(Vehicle vehicle, String name) throws Exception {
         // Check if vehicle exists
         if (vehicle == null) {
@@ -22,7 +24,7 @@ public class Engine implements Serializable {
         // Create a new engine
         Engine engine = new Engine(vehicle, name);
 
-        // Add to the Vehicle because of feedback association
+        // Add to the VehicleModel.Vehicle because of feedback association
         vehicle.addEngine(engine);
 
         return engine;
@@ -38,6 +40,6 @@ public class Engine implements Serializable {
 
     @Override
     public String toString() {
-        return "Engine: " + "Name: " + getName() + ", Vehicle: " + getVehicle().getBrand() + " " + getVehicle().getModel();
+        return "VehicleModel.Engine: " + "Name: " + getName() + ", VehicleModel.Vehicle: " + getVehicle().getBrand() + " " + getVehicle().getModel();
     }
 }

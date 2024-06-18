@@ -1,3 +1,5 @@
+package WorkerModel;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -17,7 +19,7 @@ public class OfficeWorker extends Worker implements Serializable {
 
     @Override
     public String toString() {
-        return "OfficeWorker: " + super.toString() +
+        return "WorkerModel.OfficeWorker: " + super.toString() +
                 ", Position: " + position;
     }
 }

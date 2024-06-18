@@ -1,10 +1,11 @@
+package WorkerModel;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class Experience implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -21,7 +22,7 @@ public class Experience implements Serializable {
 
     public static Experience createExperience(Worker worker) throws Exception {
         if (worker == null) {
-            throw new Exception("Worker does not exist");
+            throw new Exception("WorkerModel.Worker does not exist");
         }
 
         // Check if the worker already has an experience
@@ -50,7 +51,7 @@ public class Experience implements Serializable {
     public void addSenior(Senior senior){
         if(this.senior == null){
             if(this.junior != null) {
-                throw new IllegalStateException("Cannot set Senior when Junior is already set.");
+                throw new IllegalStateException("Cannot set WorkerModel.Senior when WorkerModel.Junior is already set.");
             }
             if(allSeniors.contains(senior)){
                 throw new IllegalStateException("This senior is already connected with some experience.");
@@ -59,7 +60,7 @@ public class Experience implements Serializable {
             this.senior = senior;
             allSeniors.add(senior);
         } else {
-            throw new IllegalStateException("Senior already exists in this Experience");
+            throw new IllegalStateException("WorkerModel.Senior already exists in this WorkerModel.Experience");
         }
     }
 
@@ -73,7 +74,7 @@ public class Experience implements Serializable {
     public void addJunior(Junior junior){
         if(this.junior == null){
             if(this.senior != null) {
-                throw new IllegalStateException("Cannot set Junior when Senior is already set.");
+                throw new IllegalStateException("Cannot set WorkerModel.Junior when WorkerModel.Senior is already set.");
             }
             if(allJuniors.contains(junior)){
                 throw new IllegalStateException("This junior is already connected with some experience.");
@@ -82,7 +83,7 @@ public class Experience implements Serializable {
             this.junior = junior;
             allJuniors.add(junior);
         } else {
-            throw new IllegalStateException("Junior exists in this Experience");
+            throw new IllegalStateException("WorkerModel.Junior exists in this WorkerModel.Experience");
         }
     }
 
@@ -95,7 +96,7 @@ public class Experience implements Serializable {
 
 
 
-    // Custom serialization for Experience
+    // Custom serialization for WorkerModel.Experience
     public static void writeExtent(ObjectOutputStream stream) throws IOException {
         stream.writeObject(allJuniors);
         stream.writeObject(allSeniors);
@@ -108,6 +109,6 @@ public class Experience implements Serializable {
 
     @Override
     public String toString() {
-        return "Experience: associated with Worker " + worker.getName() + " " + worker.getSurname();
+        return "WorkerModel.Experience: associated with WorkerModel.Worker " + worker.getName() + " " + worker.getSurname();
     }
 }

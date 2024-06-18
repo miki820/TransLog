@@ -1,3 +1,7 @@
+package WorkerModel;
+
+import VehicleModel.Vehicle;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -5,8 +9,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
-
-enum EmployeeType{WORKER, DRIVER, MECHANIC}
 
 public abstract class Worker implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -29,7 +31,7 @@ public abstract class Worker implements Serializable {
     // Attribute for Driver class
     private int drivingLicenseNumber;
 
-    // Attribute for Branch
+    // Attribute for WorkerModel.Branch
     private Branch branch;
 
     // Each worker can have one experience
@@ -120,7 +122,7 @@ public abstract class Worker implements Serializable {
             allExperiences.add(experience);
 
         } else {
-            throw new Exception("Experience already exists for this worker");
+            throw new Exception("WorkerModel.Experience already exists for this worker");
         }
     }
 
@@ -209,14 +211,14 @@ public abstract class Worker implements Serializable {
         if(employeeType.contains(EmployeeType.MECHANIC)){
             return specialization;
         }
-        throw new IllegalArgumentException("This Worker is not a Mechanic");
+        throw new IllegalArgumentException("This WorkerModel.Worker is not a Mechanic");
     }
 
     public void setSpecialization(String specialization) {
         if (employeeType.contains(EmployeeType.MECHANIC)) {
             this.specialization = specialization;
         } else {
-            throw new IllegalArgumentException("This Worker is not a Mechanic");
+            throw new IllegalArgumentException("This WorkerModel.Worker is not a Mechanic");
         }
     }
 
@@ -224,14 +226,14 @@ public abstract class Worker implements Serializable {
         if (employeeType.contains(EmployeeType.DRIVER)) {
             return drivingLicenseNumber;
         }
-        throw new IllegalArgumentException("This Worker is not a Driver");
+        throw new IllegalArgumentException("This WorkerModel.Worker is not a Driver");
     }
 
     public void setDrivingLicenseNumber(int drivingLicenseNumber) {
         if (employeeType.contains(EmployeeType.DRIVER)) {
             this.drivingLicenseNumber = drivingLicenseNumber;
         } else {
-            throw new IllegalArgumentException("This Worker is not a Driver");
+            throw new IllegalArgumentException("This WorkerModel.Worker is not a Driver");
         }
     }
 
@@ -314,9 +316,17 @@ public abstract class Worker implements Serializable {
         return allExperiences;
     }
 
+    public List<Vehicle> getDrivenVehicles() {
+        return drivenVehicles;
+    }
+
+    public List<Vehicle> getRepairedVehicles() {
+        return repairedVehicles;
+    }
+
     @Override
     public String toString() {
-        String type = "Worker";
+        String type = "WorkerModel.Worker";
         if (employeeType.contains(EmployeeType.DRIVER) && employeeType.contains(EmployeeType.MECHANIC)) {
             type = "DriverMechanic";
         } else if (employeeType.contains(EmployeeType.DRIVER)) {
@@ -334,6 +344,6 @@ public abstract class Worker implements Serializable {
                 ", PreviousJob: " + previousJob.orElse("None") +
                 ", Specialization: " + (employeeType.contains(EmployeeType.MECHANIC) ? specialization : "None") +
                 ", DrivingLicenseNumber: " + (employeeType.contains(EmployeeType.DRIVER) ? drivingLicenseNumber : "None") +
-                ", Branch: " + (branch != null ? branch.getName() : "None");
+                ", WorkerModel.Branch: " + (branch != null ? branch.getName() : "None");
     }
 }

@@ -1,3 +1,5 @@
+package WorkerModel;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -85,7 +87,7 @@ public class Branch implements Serializable {
 
     @Override
     public String toString() {
-        return "Branch: " +
+        return "WorkerModel.Branch: " +
                 "Name: " + name +
                 ", Address: " + address;
     }

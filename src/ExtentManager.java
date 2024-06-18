@@ -1,3 +1,7 @@
+import VehicleModel.Vehicle;
+import WorkerModel.Branch;
+import WorkerModel.Worker;
+
 import java.io.*;
 
 public class ExtentManager {

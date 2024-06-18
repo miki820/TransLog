@@ -1,3 +1,5 @@
+package VehicleModel;
+
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
@@ -42,6 +44,6 @@ public class Truck extends Vehicle implements Serializable {
 
     @Override
     public String toString() {
-        return "Truck: " + super.toString() + ", capacity: " + capacity;
+        return "VehicleModel.Truck: " + super.toString() + ", capacity: " + capacity;
     }
 }

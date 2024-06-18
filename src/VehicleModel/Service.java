@@ -1,6 +1,7 @@
+package VehicleModel;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Service implements Serializable {
@@ -44,7 +45,7 @@ public class Service implements Serializable {
 
     @Override
     public String toString() {
-        return "Service: " +
+        return "VehicleModel.Service: " +
                 "Price: " + price +
                 ", Description: " + description;
     }

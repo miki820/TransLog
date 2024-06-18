@@ -1,3 +1,5 @@
+package VehicleModel;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class Transport implements Serializable {
     public Transport(String startingPoint, String endingPoint, String cargo, LocalDate transportDate, List<Vehicle> vehicles) {
         this.id = UUID.randomUUID().toString();
         if (vehicles == null || vehicles.isEmpty() || vehicles.size() > 2) {
-            throw new IllegalArgumentException("Transport must have at least 1 and at most 2 vehicles.");
+            throw new IllegalArgumentException("VehicleModel.Transport must have at least 1 and at most 2 vehicles.");
         }
 
         this.startingPoint = startingPoint;
@@ -95,10 +97,10 @@ public class Transport implements Serializable {
 
     @Override
     public String toString() {
-        String vehicle1 = vehicles.size() >= 1 ? vehicles.get(0).getBrand() + " " + vehicles.get(0).getLicencePlateNumber() : "No Vehicle";
-        String vehicle2 = vehicles.size() == 2 ? vehicles.get(1).getBrand() + " " + vehicles.get(1).getLicencePlateNumber() : "No Vehicle";
+        String vehicle1 = vehicles.size() >= 1 ? vehicles.get(0).getBrand() + " " + vehicles.get(0).getLicencePlateNumber() : "No VehicleModel.Vehicle";
+        String vehicle2 = vehicles.size() == 2 ? vehicles.get(1).getBrand() + " " + vehicles.get(1).getLicencePlateNumber() : "No VehicleModel.Vehicle";
 
-        return "Transport: " +
+        return "VehicleModel.Transport: " +
                 "ID: " + id +
                 ", StartingPoint: " + startingPoint +
                 ", EndingPoint: " + endingPoint +

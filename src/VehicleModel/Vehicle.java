@@ -1,3 +1,7 @@
+package VehicleModel;
+
+import WorkerModel.EmployeeType;
+import WorkerModel.Worker;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -21,7 +25,7 @@ public abstract class Vehicle implements Serializable {
     // Functions are a repeatable attribute
     private final List<String> functions = new ArrayList<>();
 
-    // Engine is a composite attribute
+    // VehicleModel.Engine is a composite attribute
     private Engine engine;
 
     // Extent to store all Vehicles
@@ -72,7 +76,7 @@ public abstract class Vehicle implements Serializable {
             allEngines.add(engine);
 
         } else {
-            throw new Exception("Engine already exists in this vehicle");
+            throw new Exception("VehicleModel.Engine already exists in this vehicle");
         }
     }
 
@@ -120,7 +124,7 @@ public abstract class Vehicle implements Serializable {
 
     public void deleteFunction(String function) {
         if (!functions.contains(function)) {
-            throw new IllegalArgumentException("Vehicle doesn't have this function");
+            throw new IllegalArgumentException("VehicleModel.Vehicle doesn't have this function");
         } else {
             functions.remove(function);
         }
@@ -156,10 +160,10 @@ public abstract class Vehicle implements Serializable {
 
     public void startRepair(Worker mechanic) {
         if (underRepair) {
-            throw new IllegalStateException("Vehicle is already under repair");
+            throw new IllegalStateException("VehicleModel.Vehicle is already under repair");
         }
         if (allMechanics.size() >= 2) {
-            throw new IllegalStateException("Vehicle cannot be repaired by more than 2 mechanics.");
+            throw new IllegalStateException("VehicleModel.Vehicle cannot be repaired by more than 2 mechanics.");
         }
         if (!allMechanics.contains(mechanic)) {
             allMechanics.add(mechanic);
@@ -169,14 +173,14 @@ public abstract class Vehicle implements Serializable {
         }
         underRepair = true;
         mechanic.addRepairedVehicle(this);
-        System.out.println("Vehicle is now under repair by " + mechanic.getName());
+        System.out.println("VehicleModel.Vehicle is now under repair by " + mechanic.getName());
     }
 
     public void simulateRepairProcess(long duration, TimeUnit timeUnit) {
         try {
             System.out.println("Repairing: " + brand + " " + model);
             Thread.sleep(timeUnit.toMillis(duration));
-            System.out.println("Vehicle repair completed.");
+            System.out.println("VehicleModel.Vehicle repair completed.");
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             System.err.println("Interrupted while repairing vehicle.");
@@ -185,18 +189,18 @@ public abstract class Vehicle implements Serializable {
 
     public void endRepair() {
         if (!underRepair) {
-            throw new IllegalStateException("Vehicle is not under repair");
+            throw new IllegalStateException("VehicleModel.Vehicle is not under repair");
         }
         underRepair = false;
         for (Worker mechanic : allMechanics) {
             mechanic.removeRepairedVehicle(this);
         }
-        System.out.println("Vehicle repair completed");
+        System.out.println("VehicleModel.Vehicle repair completed");
     }
 
     public void checkRepairStatus() {
         if (underRepair) {
-            throw new IllegalStateException("Vehicle is under repair and cannot be used.");
+            throw new IllegalStateException("VehicleModel.Vehicle is under repair and cannot be used.");
         }
     }
 
@@ -233,13 +237,13 @@ public abstract class Vehicle implements Serializable {
                 transport.removeVehicle(this);
             }
         } else {
-            throw new IllegalArgumentException("Transport with id: " + id + " not found.");
+            throw new IllegalArgumentException("VehicleModel.Transport with id: " + id + " not found.");
         }
     }
 
     public void addDriver(Worker driver){
         if (allDrivers.size() >= 2) {
-            throw new IllegalStateException("Vehicle cannot have more than 2 drivers.");
+            throw new IllegalStateException("VehicleModel.Vehicle cannot have more than 2 drivers.");
         }
         if(!allDrivers.contains(driver)){
             allDrivers.add(driver);
@@ -256,7 +260,7 @@ public abstract class Vehicle implements Serializable {
 
     public void addMechanic(Worker mechanic){
         if (allMechanics.size() >= 2) {
-            throw new IllegalStateException("Vehicle cannot be repaired by more than 2 mechanics.");
+            throw new IllegalStateException("VehicleModel.Vehicle cannot be repaired by more than 2 mechanics.");
         }
         if(!allMechanics.contains(mechanic)){
             allMechanics.add(mechanic);
@@ -319,6 +323,10 @@ public abstract class Vehicle implements Serializable {
         return deliveryTrucks;
     }
 
+    public List<Worker> getAllDrivers() {
+        return allDrivers;
+    }
+
     public List<Worker> getAllMechanics() {
         return allMechanics;
     }
@@ -338,6 +346,6 @@ public abstract class Vehicle implements Serializable {
             functionsInfo = functionsBuilder.toString().trim();
         }
 
-        return "Brand: " + getBrand() + ", Model: " + getModel() + ", Engine: " + engineInfo + ", Plate Number: " + licencePlateNumber + ", Functions: " + functionsInfo;
+        return "Brand: " + getBrand() + ", Model: " + getModel() + ", VehicleModel.Engine: " + engineInfo + ", Plate Number: " + licencePlateNumber + ", Functions: " + functionsInfo;
     }
 }

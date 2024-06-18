@@ -5,18 +5,27 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
+import VehicleModel.Vehicle;
+import VehicleModel.Transport;
 
-public class GUI extends JFrame {
+public class VehicleWindow extends JFrame {
     private static JButton lastSelectedButton = null;
-    private static ButtonGroup buttonGroup = new ButtonGroup();
+    private List<JCheckBox> vehicleCheckBoxes = new ArrayList<>();
+    private String startingPoint;
+    private String endingPoint;
+    private String cargo;
+    private LocalDate transportDate;
 
-    public GUI() {
-        setTitle("TransLog");
+    public VehicleWindow(String startingPoint, String endingPoint, String cargo, LocalDate transportDate) {
+        this.startingPoint = startingPoint;
+        this.endingPoint = endingPoint;
+        this.cargo = cargo;
+        this.transportDate = transportDate;
+
+        setTitle("TransLog - Select Vehicles");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 500);
 
@@ -26,40 +35,30 @@ public class GUI extends JFrame {
         splitPane.setDividerSize(0);
         getContentPane().add(splitPane, BorderLayout.CENTER);
 
-        // Text Fields
+        // Panel w środku
         GridBagConstraints gbc = new GridBagConstraints();
-        JPanel textFields = new JPanel(new GridBagLayout());
-        textFields.setBackground(Color.WHITE);
-        textFields.setBorder(BorderFactory.createEmptyBorder(20, 18, 20, 20));
+        JPanel vehicleSelectionPanel = new JPanel(new GridBagLayout());
+        vehicleSelectionPanel.setBackground(Color.WHITE);
+        vehicleSelectionPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        // Create vehicle selection checkboxes
         gbc.gridwidth = 1;
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(8, 0, 10, 0); // Add spacing between text fields
-        RoundedTextField punktKoncowyField = createPlaceholderTextField("Punkt końcowy");
-        punktKoncowyField.setBackground(new Color(220, 220, 220));
-        punktKoncowyField.setPreferredSize(new Dimension(300, 30));
-        textFields.add(punktKoncowyField, gbc);
+        gbc.insets = new Insets(8, 0, 10, 0); // Add spacing between checkboxes
+        for (Vehicle vehicle : Vehicle.getAllVehicles()) {
+            String displayText = vehicle.getBrand() + " " + vehicle.getLicencePlateNumber();
+            JCheckBox checkBox = new JCheckBox(displayText);
+            checkBox.setBackground(new Color(220, 220, 220));
+            checkBox.setForeground(Color.BLACK);
+            checkBox.setFont(new Font("Arial", Font.PLAIN, 14));
+            checkBox.setPreferredSize(new Dimension(300, 30));
+            vehicleCheckBoxes.add(checkBox);
+            vehicleSelectionPanel.add(checkBox, gbc);
+            gbc.gridy++;
+        }
 
-        gbc.gridy++;
-        RoundedTextField punktStartowyField = createPlaceholderTextField("Punkt startowy");
-        punktStartowyField.setBackground(new Color(220, 220, 220));
-        punktStartowyField.setPreferredSize(new Dimension(300, 30));
-        textFields.add(punktStartowyField, gbc);
-
-        gbc.gridy++;
-        RoundedTextField przewozonyTowarField = createPlaceholderTextField("Przewożony towar");
-        przewozonyTowarField.setBackground(new Color(220, 220, 220));
-        przewozonyTowarField.setPreferredSize(new Dimension(300, 30));
-        textFields.add(przewozonyTowarField, gbc);
-
-        gbc.gridy++;
-        RoundedTextField transportDateField = createPlaceholderTextField("Data transportu (YYYY-MM-DD)");
-        transportDateField.setBackground(new Color(220, 220, 220));
-        transportDateField.setPreferredSize(new Dimension(300, 30));
-        textFields.add(transportDateField, gbc);
-
-        gbc.gridy++;
+        gbc.gridy = 2;
         gbc.insets = new Insets(20, 0, 0, 0);
 
         // Panel w środku
@@ -68,7 +67,7 @@ public class GUI extends JFrame {
         contentPanel.setBackground(Color.WHITE);
         contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel titleOfContentPage = new JLabel("Planowanie Transportu");
+        JLabel titleOfContentPage = new JLabel("Wybór Pojazdów");
         titleOfContentPage.setFont(new Font("Arial", Font.BOLD, 22));
 
         gbc.gridx = 0;
@@ -81,35 +80,30 @@ public class GUI extends JFrame {
         gbc.gridy = 1;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        contentPanel.add(textFields, gbc);
+        contentPanel.add(vehicleSelectionPanel, gbc);
 
-        // "Dodaj" button
-        JButton dodajButton = new JButton("Dodaj");
-        dodajButton.setForeground(Color.WHITE);
-        dodajButton.setBackground(new Color(29, 157, 250));
-        dodajButton.setPreferredSize(new Dimension(100, 40));
-        dodajButton.setFocusPainted(false);
-        dodajButton.setBorderPainted(false);
-
-        dodajButton.addActionListener(new ActionListener() {
+        // "Proceed" button
+        JButton proceedButton = new JButton("Dodaj");
+        proceedButton.setForeground(Color.WHITE);
+        proceedButton.setBackground(new Color(29, 157, 250));
+        proceedButton.setPreferredSize(new Dimension(100, 40));
+        proceedButton.setFocusPainted(false);
+        proceedButton.setBorderPainted(false);
+        proceedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String startingPoint = punktStartowyField.getText();
-                String endingPoint = punktKoncowyField.getText();
-                String cargo = przewozonyTowarField.getText();
-                String transportDateStr = transportDateField.getText();
-                LocalDate transportDate;
+                List<Vehicle> selectedVehicles = getSelectedVehicles();
+                if (selectedVehicles.size() < 1 || selectedVehicles.size() > 2) {
+                    JOptionPane.showMessageDialog(VehicleWindow.this, "Please select at least one and at most two vehicles.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    // Create a new VehicleModel.Transport object
+                    Transport transport = new Transport(startingPoint, endingPoint, cargo, transportDate, selectedVehicles);
 
-                try {
-                    transportDate = LocalDate.parse(transportDateStr, DateTimeFormatter.ISO_LOCAL_DATE);
-                } catch (DateTimeParseException ex) {
-                    JOptionPane.showMessageDialog(GUI.this, "Invalid date format. Please use YYYY-MM-DD.", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    // Open summary window
+                    SummaryWindow summaryWindow = new SummaryWindow(startingPoint, endingPoint, cargo, transportDate.toString(), selectedVehicles);
+                    summaryWindow.setVisible(true);
+                    VehicleWindow.this.dispose();
                 }
-
-                VehicleWindow vehicleWindow = new VehicleWindow(startingPoint, endingPoint, cargo, transportDate);
-                vehicleWindow.setVisible(true);
-                GUI.this.dispose();
             }
         });
 
@@ -117,7 +111,7 @@ public class GUI extends JFrame {
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.SOUTH;
         gbc.insets = new Insets(20, 0, 0, 0);
-        contentPanel.add(dodajButton, gbc);
+        contentPanel.add(proceedButton, gbc);
 
         // Panel boczny (sidebar)
         Image planningImage = new ImageIcon("src/images/plan_icon.png").getImage();
@@ -154,6 +148,7 @@ public class GUI extends JFrame {
         analyze.setIcon(analyzeIcon);
         analyze.setIconTextGap(34);
 
+        ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(planning);
         buttonGroup.add(show);
         buttonGroup.add(analyze);
@@ -202,19 +197,20 @@ public class GUI extends JFrame {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (lastSelectedButton != null && lastSelectedButton != button) {
+                JButton clickedButton = (JButton) e.getSource();
+                if (lastSelectedButton != null && lastSelectedButton != clickedButton) {
                     lastSelectedButton.setOpaque(false);
                     lastSelectedButton.setForeground(Color.BLACK);
                 }
-                if (button == lastSelectedButton) {
-                    button.setOpaque(false);
-                    button.setForeground(Color.BLACK);
+                if (clickedButton == lastSelectedButton) {
+                    clickedButton.setOpaque(false);
+                    clickedButton.setForeground(Color.BLACK);
                     lastSelectedButton = null;
                 } else {
-                    button.setOpaque(true);
-                    button.setBackground(new Color(29, 157, 250));
-                    button.setForeground(Color.WHITE);
-                    lastSelectedButton = button;
+                    clickedButton.setOpaque(true);
+                    clickedButton.setBackground(new Color(29, 157, 250));
+                    clickedButton.setForeground(Color.WHITE);
+                    lastSelectedButton = clickedButton;
                 }
             }
         });
@@ -222,38 +218,17 @@ public class GUI extends JFrame {
         return button;
     }
 
-    private static RoundedTextField createPlaceholderTextField(String placeholder) {
-        RoundedTextField textField = new RoundedTextField(20) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                if (!this.isFocusOwner() && getText().isEmpty()) {
-                    Graphics2D g2 = (Graphics2D) g.create();
-                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2.setColor(Color.GRAY);
-                    g2.drawString(placeholder, 10, 20); // Adjust the position as needed
-                    g2.dispose();
+    private List<Vehicle> getSelectedVehicles() {
+        List<Vehicle> selectedVehicles = new ArrayList<>();
+        for (JCheckBox checkBox : vehicleCheckBoxes) {
+            if (checkBox.isSelected()) {
+                for (Vehicle vehicle : Vehicle.getAllVehicles()) {
+                    if (checkBox.getText().equals(vehicle.getBrand() + " " + vehicle.getLicencePlateNumber())) {
+                        selectedVehicles.add(vehicle);
+                    }
                 }
             }
-        };
-        textField.setOpaque(false);
-        textField.setBorder(BorderFactory.createCompoundBorder(
-                textField.getBorder(),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        textField.setBackground(new Color(220, 220, 220));
-        textField.setPreferredSize(new Dimension(300, 30));
-
-        textField.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                textField.repaint();
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                textField.repaint();
-            }
-        });
-        return textField;
+        }
+        return selectedVehicles;
     }
 }

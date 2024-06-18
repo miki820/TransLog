@@ -1,3 +1,8 @@
+package VehicleModel;
+
+import VehicleModel.Service;
+import VehicleModel.Vehicle;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
