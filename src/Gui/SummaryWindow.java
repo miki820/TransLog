@@ -1,22 +1,18 @@
-package GUI;
+package Gui;
 
-import VehicleModel.Vehicle;
 import VehicleModel.Transport;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.stream.Collectors;
+import Extent.ExtentManager;
 
 public class SummaryWindow extends JFrame {
 
     private Transport transport;
 
-    public SummaryWindow(String startingPoint, String endingPoint, String cargo, String transportDate, List<Vehicle> selectedVehicles) {
-        // Create a new Transport object
-        this.transport = new Transport(startingPoint, endingPoint, cargo, LocalDate.parse(transportDate), selectedVehicles);
+    public SummaryWindow(Transport transport) {
+        this.transport = transport;
 
         setTitle("Podsumowanie");
         setSize(600, 400);
@@ -31,11 +27,12 @@ public class SummaryWindow extends JFrame {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         mainPanel.add(titleLabel, BorderLayout.NORTH);
 
-        String vehicleInfo = selectedVehicles.stream()
+        // Generate vehicle and driver info for the summary
+        String vehicleInfo = transport.getVehicles().stream()
                 .map(vehicle -> vehicle.getBrand() + " " + vehicle.getLicencePlateNumber())
                 .collect(Collectors.joining(", "));
 
-        String driverInfo = selectedVehicles.stream()
+        String driverInfo = transport.getVehicles().stream()
                 .flatMap(vehicle -> vehicle.getAllDrivers().stream())
                 .map(driver -> driver.getName())
                 .collect(Collectors.joining(", "));
@@ -45,7 +42,7 @@ public class SummaryWindow extends JFrame {
         summaryArea.setBackground(new Color(220, 220, 220));
         summaryArea.setFont(new Font("Arial", Font.PLAIN, 16));
         summaryArea.setText(String.format("Miejsce wyjazdu: %s\nMiejsce docelowe: %s\nTowar: %s\nData: %s\nPojazdy: %s\nKierowcy: %s",
-                startingPoint, endingPoint, cargo, transportDate, vehicleInfo, driverInfo));
+                transport.getStartingPoint(), transport.getEndingPoint(), transport.getCargo(), transport.getTransportDate().toString(), vehicleInfo, driverInfo));
         summaryArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         mainPanel.add(summaryArea, BorderLayout.CENTER);
@@ -53,6 +50,7 @@ public class SummaryWindow extends JFrame {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(Color.WHITE);
 
+        // Create accept button
         JButton acceptButton = new JButton("Akceptuj");
         acceptButton.setForeground(Color.WHITE);
         acceptButton.setBackground(new Color(29, 157, 250));
@@ -60,11 +58,15 @@ public class SummaryWindow extends JFrame {
         acceptButton.setFocusPainted(false);
         acceptButton.setBorderPainted(false);
         acceptButton.addActionListener(e -> {
-            // Transport is already added to the system in the constructor
             JOptionPane.showMessageDialog(SummaryWindow.this, "Transport zaakceptowany.", "Informacja", JOptionPane.INFORMATION_MESSAGE);
             showRestartOption();
+            ExtentManager.saveExtent();
+            ExtentManager.clearAllData();
+            ExtentManager.loadExtent();
+            Transport.showAllTransports();
         });
 
+        // Create reject button
         JButton rejectButton = new JButton("Nie Akceptuj");
         rejectButton.setForeground(Color.WHITE);
         rejectButton.setBackground(new Color(29, 157, 250));
@@ -76,6 +78,10 @@ public class SummaryWindow extends JFrame {
             transport.removeTransport();
             JOptionPane.showMessageDialog(SummaryWindow.this, "Transport odrzucony.", "Informacja", JOptionPane.INFORMATION_MESSAGE);
             showRestartOption();
+            ExtentManager.saveExtent();
+            ExtentManager.clearAllData();
+            ExtentManager.loadExtent();
+            Transport.showAllTransports();
         });
 
         buttonPanel.add(rejectButton);
@@ -86,12 +92,18 @@ public class SummaryWindow extends JFrame {
         getContentPane().add(mainPanel);
     }
 
+
+    /**
+     * Displays a dialog to ask if the user wants to add a new transport.
+     * If yes, opens the main GUI for planning a new transport.
+     * Closes the current window in any case.
+     */
     private void showRestartOption() {
         int response = JOptionPane.showConfirmDialog(SummaryWindow.this, "Czy chcesz dodać nowy transport?", "Nowy Transport", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION) {
             // Open the main GUI for planning transport
-            GUI mainGUI = new GUI();
-            mainGUI.setVisible(true);
+            AddTransportWindow mainAddTransportWindow = new AddTransportWindow();
+            mainAddTransportWindow.setVisible(true);
         }
         // Close the current window
         dispose();

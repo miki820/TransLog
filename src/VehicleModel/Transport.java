@@ -1,5 +1,8 @@
 package VehicleModel;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -124,6 +127,36 @@ public class Transport implements Serializable {
 
     public List<Vehicle> getVehicles() {
         return vehicles;
+    }
+
+    public static List<Transport> getAllTransports() {
+        return allTransports;
+    }
+
+    public String getStartingPoint() {
+        return startingPoint;
+    }
+
+    public String getEndingPoint() {
+        return endingPoint;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public LocalDate getTransportDate() {
+        return transportDate;
+    }
+
+    // Write extent of vehicles and engines to a stream
+    public static void writeExtent(ObjectOutputStream stream) throws IOException {
+        stream.writeObject(allTransports);
+    }
+
+    // Read extent of vehicles and engines from a stream
+    public static void readExtent(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        allTransports = (ArrayList<Transport>) stream.readObject();
     }
 
     /**

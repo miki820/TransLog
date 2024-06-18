@@ -1,4 +1,4 @@
-package GUI;
+package Gui;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -100,7 +100,7 @@ public class VehicleWindow extends JFrame {
                     Transport transport = new Transport(startingPoint, endingPoint, cargo, transportDate, selectedVehicles);
 
                     // Open summary window
-                    SummaryWindow summaryWindow = new SummaryWindow(startingPoint, endingPoint, cargo, transportDate.toString(), selectedVehicles);
+                    SummaryWindow summaryWindow = new SummaryWindow(transport);
                     summaryWindow.setVisible(true);
                     VehicleWindow.this.dispose();
                 }

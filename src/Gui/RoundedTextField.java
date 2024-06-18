@@ -1,4 +1,4 @@
-package GUI;
+package Gui;
 
 import javax.swing.JTextField;
 import java.awt.Graphics;

@@ -1,3 +1,6 @@
+package Extent;
+
+import VehicleModel.Transport;
 import VehicleModel.Vehicle;
 import WorkerModel.Branch;
 import WorkerModel.Worker;
@@ -12,6 +15,7 @@ public class ExtentManager {
             Vehicle.writeExtent(out);
             Worker.writeExtent(out);
             Branch.writeExtent(out);
+            Transport.writeExtent(out);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -22,6 +26,7 @@ public class ExtentManager {
             Vehicle.readExtent(in);
             Worker.readExtent(in);
             Branch.readExtent(in);
+            Transport.readExtent(in);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -33,5 +38,6 @@ public class ExtentManager {
         Worker.getAllWorkers().clear();
         Worker.getAllExperiences().clear();
         Branch.getAllBranches().clear();
+        Transport.getAllTransports().clear();
     }
 }

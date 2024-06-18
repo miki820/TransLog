@@ -1,4 +1,4 @@
-package GUI;
+package Gui;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -11,11 +11,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-public class GUI extends JFrame {
+public class AddTransportWindow extends JFrame {
     private static JButton lastSelectedButton = null;
     private static ButtonGroup buttonGroup = new ButtonGroup();
 
-    public GUI() {
+    public AddTransportWindow() {
         setTitle("TransLog");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 500);
@@ -105,13 +105,13 @@ public class GUI extends JFrame {
                 try {
                     transportDate = LocalDate.parse(transportDateStr, DateTimeFormatter.ISO_LOCAL_DATE);
                 } catch (DateTimeParseException ex) {
-                    JOptionPane.showMessageDialog(GUI.this, "Invalid date format. Please use YYYY-MM-DD.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(AddTransportWindow.this, "Invalid date format. Please use YYYY-MM-DD.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 VehicleWindow vehicleWindow = new VehicleWindow(startingPoint, endingPoint, cargo, transportDate);
                 vehicleWindow.setVisible(true);
-                GUI.this.dispose();
+                AddTransportWindow.this.dispose();
             }
         });
 
@@ -261,7 +261,7 @@ public class GUI extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            GUI frame = new GUI();
+            AddTransportWindow frame = new AddTransportWindow();
             frame.setVisible(true);
         });
     }

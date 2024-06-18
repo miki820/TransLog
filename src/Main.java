@@ -1,4 +1,4 @@
-import GUI.GUI;
+import Gui.AddTransportWindow;
 import VehicleModel.*;
 import WorkerModel.*;
 
@@ -34,22 +34,9 @@ public class Main {
         Senior senior = Senior.createSenior(seniorExperience, 1000);
         Junior junior = Junior.createJunior(juniorExperience, 4);
 
-        ExtentManager.saveExtent();
-        ExtentManager.clearAllData();
-        ExtentManager.loadExtent();
-
-        Vehicle.showAllVehicles();
-        Vehicle.showAllEngines();
-        Worker.showAllWorkers();
-        Worker.showAllExperiences();
-        Branch.showAllBranches();
-
         SwingUtilities.invokeLater(() -> {
-            GUI frame = new GUI();
+            AddTransportWindow frame = new AddTransportWindow();
             frame.setVisible(true);
         });
-
-        Thread.sleep(5000);
-        Transport.showAllTransports();
     }
 }
