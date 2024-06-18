@@ -15,10 +15,9 @@ public abstract class Worker implements Serializable {
 
     private String name;
     private String surname;
-
     private LocalDate birthDate;
 
-    //Derived attribute
+    // Derived attribute for age
     private int age;
     private int seniority;
     private transient Optional<String> previousJob;
@@ -31,15 +30,19 @@ public abstract class Worker implements Serializable {
     // Attribute for Driver class
     private int drivingLicenseNumber;
 
-    // Attribute for WorkerModel.Branch
+    // Attribute for Branch
     private Branch branch;
 
     // Each worker can have one experience
     private Experience experience;
 
+    // Static list to store all workers
     private static List<Worker> allWorkers = new ArrayList<>();
+
+    // Static set to store all experiences
     private static Set<Experience> allExperiences = new HashSet<>();
 
+    // Lists to store vehicles driven and repaired by the worker
     private List<Vehicle> drivenVehicles = new ArrayList<>();
     private List<Vehicle> repairedVehicles = new ArrayList<>();
 
@@ -64,8 +67,9 @@ public abstract class Worker implements Serializable {
         allExperiences.add(experience);
     }
 
+    // Static factory method to create a Driver
     public static Worker createDriver(String name, String surname, LocalDate birthDate, int seniority, String previousJob, int drivingLicenseNumber, Branch branch) {
-        Worker worker = new Worker(name, surname, birthDate, seniority, previousJob, branch){
+        Worker worker = new Worker(name, surname, birthDate, seniority, previousJob, branch) {
             @Override
             public double countSalary() {
                 return getDrivingLicenseNumber() * 1000;
@@ -80,8 +84,9 @@ public abstract class Worker implements Serializable {
         return worker;
     }
 
-    public static Worker createMechanic(String name, String surname, LocalDate birthDate, int seniority, String previousJob, String specialization, Branch branch){
-        Worker worker = new Worker(name, surname, birthDate, seniority, previousJob, branch){
+    // Static factory method to create a Mechanic
+    public static Worker createMechanic(String name, String surname, LocalDate birthDate, int seniority, String previousJob, String specialization, Branch branch) {
+        Worker worker = new Worker(name, surname, birthDate, seniority, previousJob, branch) {
             @Override
             public double countSalary() {
                 return getSpecialization().equals("trucks") ? 2000 : 1000;
@@ -95,9 +100,10 @@ public abstract class Worker implements Serializable {
         }
         return worker;
     }
-    
-    public static Worker createDriverMechanic(String name, String surname, LocalDate birthDate, int seniority, String previousJob, int drivingLicenseNumber, String specialization, Branch branch){
-        Worker worker = new Worker(name, surname, birthDate, seniority, previousJob, branch){
+
+    // Static factory method to create a DriverMechanic
+    public static Worker createDriverMechanic(String name, String surname, LocalDate birthDate, int seniority, String previousJob, int drivingLicenseNumber, String specialization, Branch branch) {
+        Worker worker = new Worker(name, surname, birthDate, seniority, previousJob, branch) {
             @Override
             public double countSalary() {
                 return getSpecialization().equals("trucks") ? 2000 * getDrivingLicenseNumber() : 1000 * getDrivingLicenseNumber();
@@ -122,7 +128,7 @@ public abstract class Worker implements Serializable {
             allExperiences.add(experience);
 
         } else {
-            throw new Exception("WorkerModel.Experience already exists for this worker");
+            throw new Exception("Experience already exists for this worker");
         }
     }
 
@@ -138,8 +144,10 @@ public abstract class Worker implements Serializable {
         return experience;
     }
 
+    // Abstract method to be implemented by subclasses for salary calculation
     public abstract double countSalary();
 
+    // Static method to remove a worker
     public static void removeWorker(Worker worker) {
         allWorkers.remove(worker);
         if (worker.branch != null) {
@@ -147,6 +155,7 @@ public abstract class Worker implements Serializable {
         }
     }
 
+    // Getters and setters
     public String getName() {
         return name;
     }
@@ -208,17 +217,17 @@ public abstract class Worker implements Serializable {
     }
 
     public String getSpecialization() {
-        if(employeeType.contains(EmployeeType.MECHANIC)){
+        if (employeeType.contains(EmployeeType.MECHANIC)) {
             return specialization;
         }
-        throw new IllegalArgumentException("This WorkerModel.Worker is not a Mechanic");
+        throw new IllegalArgumentException("This Worker is not a Mechanic");
     }
 
     public void setSpecialization(String specialization) {
         if (employeeType.contains(EmployeeType.MECHANIC)) {
             this.specialization = specialization;
         } else {
-            throw new IllegalArgumentException("This WorkerModel.Worker is not a Mechanic");
+            throw new IllegalArgumentException("This Worker is not a Mechanic");
         }
     }
 
@@ -226,22 +235,23 @@ public abstract class Worker implements Serializable {
         if (employeeType.contains(EmployeeType.DRIVER)) {
             return drivingLicenseNumber;
         }
-        throw new IllegalArgumentException("This WorkerModel.Worker is not a Driver");
+        throw new IllegalArgumentException("This Worker is not a Driver");
     }
 
     public void setDrivingLicenseNumber(int drivingLicenseNumber) {
         if (employeeType.contains(EmployeeType.DRIVER)) {
             this.drivingLicenseNumber = drivingLicenseNumber;
         } else {
-            throw new IllegalArgumentException("This WorkerModel.Worker is not a Driver");
+            throw new IllegalArgumentException("This Worker is not a Driver");
         }
     }
 
-    public void addDrivenVehicle(Vehicle vehicle){
+    // Methods to add and remove driven vehicles
+    public void addDrivenVehicle(Vehicle vehicle) {
         if (!employeeType.contains(EmployeeType.DRIVER)) {
             throw new IllegalStateException("This worker is not a driver.");
         }
-        if(!drivenVehicles.contains(vehicle)){
+        if (!drivenVehicles.contains(vehicle)) {
             drivenVehicles.add(vehicle);
             vehicle.addDriver(this);
         }
@@ -254,11 +264,12 @@ public abstract class Worker implements Serializable {
         }
     }
 
-    public void addRepairedVehicle(Vehicle vehicle){
+    // Methods to add and remove repaired vehicles
+    public void addRepairedVehicle(Vehicle vehicle) {
         if (!employeeType.contains(EmployeeType.MECHANIC)) {
             throw new IllegalStateException("This worker is not a mechanic.");
         }
-        if(!repairedVehicles.contains(vehicle)){
+        if (!repairedVehicles.contains(vehicle)) {
             repairedVehicles.add(vehicle);
             vehicle.addMechanic(this);
         }
@@ -271,23 +282,23 @@ public abstract class Worker implements Serializable {
         }
     }
 
+    // Display all workers
     public static void showAllWorkers() {
         System.out.println("Extent of the class: " + Worker.class.getName());
-
         for (Worker worker : allWorkers) {
             System.out.println(worker);
         }
     }
 
+    // Display all experiences
     public static void showAllExperiences() {
         System.out.println("Extent of the class: " + Experience.class.getName());
-
         for (Experience experience : allExperiences) {
             System.out.println(experience);
         }
     }
 
-    //Methods to handle optional attribute
+    // Methods to handle optional attribute
     private void writeObject(ObjectOutputStream oos) throws IOException {
         previousJobSerialized = previousJob.orElse(null);
         oos.defaultWriteObject();
@@ -298,6 +309,7 @@ public abstract class Worker implements Serializable {
         previousJob = Optional.ofNullable(previousJobSerialized);
     }
 
+    // Methods to write and read extent
     public static void writeExtent(ObjectOutputStream stream) throws IOException {
         stream.writeObject(allWorkers);
         stream.writeObject(allExperiences);
@@ -308,6 +320,7 @@ public abstract class Worker implements Serializable {
         allExperiences = (Set<Experience>) stream.readObject();
     }
 
+    // Getters for static lists
     public static List<Worker> getAllWorkers() {
         return allWorkers;
     }
@@ -316,6 +329,7 @@ public abstract class Worker implements Serializable {
         return allExperiences;
     }
 
+    // Getters for driven and repaired vehicles
     public List<Vehicle> getDrivenVehicles() {
         return drivenVehicles;
     }
@@ -326,7 +340,7 @@ public abstract class Worker implements Serializable {
 
     @Override
     public String toString() {
-        String type = "WorkerModel.Worker";
+        String type = "Worker";
         if (employeeType.contains(EmployeeType.DRIVER) && employeeType.contains(EmployeeType.MECHANIC)) {
             type = "DriverMechanic";
         } else if (employeeType.contains(EmployeeType.DRIVER)) {
@@ -344,6 +358,6 @@ public abstract class Worker implements Serializable {
                 ", PreviousJob: " + previousJob.orElse("None") +
                 ", Specialization: " + (employeeType.contains(EmployeeType.MECHANIC) ? specialization : "None") +
                 ", DrivingLicenseNumber: " + (employeeType.contains(EmployeeType.DRIVER) ? drivingLicenseNumber : "None") +
-                ", WorkerModel.Branch: " + (branch != null ? branch.getName() : "None");
+                ", Branch: " + (branch != null ? branch.getName() : "None");
     }
 }

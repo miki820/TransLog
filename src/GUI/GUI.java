@@ -20,13 +20,13 @@ public class GUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 500);
 
-        // Utworzenie podziału okna
+        // Create the split pane
         JSplitPane splitPane = new JSplitPane();
         splitPane.setOneTouchExpandable(false);
         splitPane.setDividerSize(0);
         getContentPane().add(splitPane, BorderLayout.CENTER);
 
-        // Text Fields
+        // Text Fields Panel
         GridBagConstraints gbc = new GridBagConstraints();
         JPanel textFields = new JPanel(new GridBagLayout());
         textFields.setBackground(Color.WHITE);
@@ -36,6 +36,8 @@ public class GUI extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(8, 0, 10, 0); // Add spacing between text fields
+
+        // Create and add text fields
         RoundedTextField punktKoncowyField = createPlaceholderTextField("Punkt końcowy");
         punktKoncowyField.setBackground(new Color(220, 220, 220));
         punktKoncowyField.setPreferredSize(new Dimension(300, 30));
@@ -62,7 +64,7 @@ public class GUI extends JFrame {
         gbc.gridy++;
         gbc.insets = new Insets(20, 0, 0, 0);
 
-        // Panel w środku
+        // Main content panel
         RoundedPanel contentPanel = new RoundedPanel(15);
         contentPanel.setLayout(new GridBagLayout());
         contentPanel.setBackground(Color.WHITE);
@@ -119,7 +121,7 @@ public class GUI extends JFrame {
         gbc.insets = new Insets(20, 0, 0, 0);
         contentPanel.add(dodajButton, gbc);
 
-        // Panel boczny (sidebar)
+        // Sidebar panel
         Image planningImage = new ImageIcon("src/images/plan_icon.png").getImage();
         Icon planningIcon = new ImageIcon(planningImage);
         Image showImage = new ImageIcon("src/images/show_icon.png").getImage();
@@ -170,16 +172,16 @@ public class GUI extends JFrame {
         Border blueLine = BorderFactory.createMatteBorder(0, 0, 0, 2, new Color(29, 157, 250));
         sidebar.setBorder(BorderFactory.createCompoundBorder(blueLine, margin));
 
-        // Główna część aplikacji
+        // Main panel
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(Color.LIGHT_GRAY);
         mainPanel.setLayout(new GridBagLayout());
         splitPane.setRightComponent(mainPanel);
 
-        // Ustawienie podziału
+        // Set divider location
         splitPane.setDividerLocation(200);
 
-        //Setting component
+        // Setting components
         gbc = new GridBagConstraints();
         gbc.insets = new Insets(30, 30, 30, 30);
         gbc.fill = GridBagConstraints.BOTH;
@@ -255,5 +257,12 @@ public class GUI extends JFrame {
             }
         });
         return textField;
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            GUI frame = new GUI();
+            frame.setVisible(true);
+        });
     }
 }

@@ -13,6 +13,7 @@ public class Truck extends Vehicle implements Serializable {
         this.capacity = capacity;
     }
 
+    // Display all vehicles of type Truck
     public static void showAllVehicles() {
         System.out.println("Extent of the class: " + Truck.class.getName());
 
@@ -23,6 +24,7 @@ public class Truck extends Vehicle implements Serializable {
         }
     }
 
+    // Display all engines of type Truck
     public static void showAllEngines() {
         System.out.println("Extent of the class: " + Engine.class.getName());
 
@@ -44,6 +46,6 @@ public class Truck extends Vehicle implements Serializable {
 
     @Override
     public String toString() {
-        return "VehicleModel.Truck: " + super.toString() + ", capacity: " + capacity;
+        return "Truck: " + super.toString() + ", capacity: " + capacity;
     }
 }

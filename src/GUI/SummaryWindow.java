@@ -5,6 +5,7 @@ import VehicleModel.Transport;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,7 +62,7 @@ public class SummaryWindow extends JFrame {
         acceptButton.addActionListener(e -> {
             // Transport is already added to the system in the constructor
             JOptionPane.showMessageDialog(SummaryWindow.this, "Transport zaakceptowany.", "Informacja", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
+            showRestartOption();
         });
 
         JButton rejectButton = new JButton("Nie Akceptuj");
@@ -74,7 +75,7 @@ public class SummaryWindow extends JFrame {
             // Remove the transport from the system
             transport.removeTransport();
             JOptionPane.showMessageDialog(SummaryWindow.this, "Transport odrzucony.", "Informacja", JOptionPane.INFORMATION_MESSAGE);
-            dispose();
+            showRestartOption();
         });
 
         buttonPanel.add(rejectButton);
@@ -83,5 +84,16 @@ public class SummaryWindow extends JFrame {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         getContentPane().add(mainPanel);
+    }
+
+    private void showRestartOption() {
+        int response = JOptionPane.showConfirmDialog(SummaryWindow.this, "Czy chcesz dodać nowy transport?", "Nowy Transport", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+            // Open the main GUI for planning transport
+            GUI mainGUI = new GUI();
+            mainGUI.setVisible(true);
+        }
+        // Close the current window
+        dispose();
     }
 }

@@ -22,10 +22,12 @@ public class Branch implements Serializable {
         addBranch(this);
     }
 
+    // Add a branch to the extent of all branches
     private static void addBranch(Branch branch) {
         allBranches.add(branch);
     }
 
+    // Remove a branch from the extent of all branches
     public static void removeBranch(Branch branch) {
         if (branch != null) {
             branch.removeAllWorkers();
@@ -35,6 +37,7 @@ public class Branch implements Serializable {
         }
     }
 
+    // Remove all workers from the branch
     private void removeAllWorkers() {
         for (Worker worker : workers) {
             Worker.removeWorker(worker);
@@ -42,19 +45,23 @@ public class Branch implements Serializable {
         workers.clear();
     }
 
+    // Add a worker to the branch
     public void addWorker(Worker worker) {
         workers.add(worker);
     }
 
+    // Remove a worker from the branch
     public void removeWorker(Worker worker) {
         workers.remove(worker);
         Worker.removeWorker(worker);
     }
 
+    // Get the name of the branch
     public String getName() {
         return name;
     }
 
+    // Display all branches
     public static void showAllBranches() {
         System.out.println("Extent of the class: " + Branch.class.getName());
 
@@ -63,7 +70,7 @@ public class Branch implements Serializable {
         }
     }
 
-    // Default comparator is not serializable
+    // Default comparator for branches
     private static class BranchComparator implements Comparator<Branch>, Serializable {
         private static final long serialVersionUID = 1L;
 
@@ -73,21 +80,24 @@ public class Branch implements Serializable {
         }
     }
 
+    // Write extent of branches to a stream
     public static void writeExtent(ObjectOutputStream stream) throws IOException {
         stream.writeObject(allBranches);
     }
 
+    // Read extent of branches from a stream
     public static void readExtent(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         allBranches = (Set<Branch>) stream.readObject();
     }
 
+    // Get all branches
     public static Set<Branch> getAllBranches() {
         return allBranches;
     }
 
     @Override
     public String toString() {
-        return "WorkerModel.Branch: " +
+        return "Branch: " +
                 "Name: " + name +
                 ", Address: " + address;
     }

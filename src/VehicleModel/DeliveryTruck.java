@@ -13,6 +13,7 @@ public class DeliveryTruck extends Vehicle implements Serializable {
         this.maxCargoVolume = maxCargoVolume;
     }
 
+    // Display all vehicles of type DeliveryTruck
     public static void showAllVehicles() {
         System.out.println("Extent of the class: " + DeliveryTruck.class.getName());
 
@@ -23,6 +24,7 @@ public class DeliveryTruck extends Vehicle implements Serializable {
         }
     }
 
+    // Display all engines of type DeliveryTruck
     public static void showAllEngines() {
         System.out.println("Extent of the class: " + Engine.class.getName());
 
@@ -44,6 +46,6 @@ public class DeliveryTruck extends Vehicle implements Serializable {
 
     @Override
     public String toString() {
-        return "Delivery VehicleModel.Truck: " + super.toString() + ", maxCargoVolume: " + maxCargoVolume;
+        return "Delivery Truck: " + super.toString() + ", maxCargoVolume: " + maxCargoVolume;
     }
 }

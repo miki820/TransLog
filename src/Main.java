@@ -48,5 +48,8 @@ public class Main {
             GUI frame = new GUI();
             frame.setVisible(true);
         });
+
+        Thread.sleep(5000);
+        Transport.showAllTransports();
     }
 }
