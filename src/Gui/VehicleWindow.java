@@ -12,13 +12,19 @@ import VehicleModel.Vehicle;
 import VehicleModel.Transport;
 
 public class VehicleWindow extends JFrame {
+    // Static variable to keep track of the last selected button in the sidebar
     private static JButton lastSelectedButton = null;
+
+    // List to store checkboxes for vehicle selection
     private List<JCheckBox> vehicleCheckBoxes = new ArrayList<>();
+
+    // Variables to store transport details
     private String startingPoint;
     private String endingPoint;
     private String cargo;
     private LocalDate transportDate;
 
+    // Constructor to initialize the VehicleWindow with transport details
     public VehicleWindow(String startingPoint, String endingPoint, String cargo, LocalDate transportDate) {
         this.startingPoint = startingPoint;
         this.endingPoint = endingPoint;
@@ -29,13 +35,13 @@ public class VehicleWindow extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 500);
 
-        // Utworzenie podziału okna
+        // Create split pane for sidebar and main content
         JSplitPane splitPane = new JSplitPane();
         splitPane.setOneTouchExpandable(false);
         splitPane.setDividerSize(0);
         getContentPane().add(splitPane, BorderLayout.CENTER);
 
-        // Panel w środku
+        // Setup vehicle selection panel
         GridBagConstraints gbc = new GridBagConstraints();
         JPanel vehicleSelectionPanel = new JPanel(new GridBagLayout());
         vehicleSelectionPanel.setBackground(Color.WHITE);
@@ -61,7 +67,7 @@ public class VehicleWindow extends JFrame {
         gbc.gridy = 2;
         gbc.insets = new Insets(20, 0, 0, 0);
 
-        // Panel w środku
+        // Setup content panel
         RoundedPanel contentPanel = new RoundedPanel(15);
         contentPanel.setLayout(new GridBagLayout());
         contentPanel.setBackground(Color.WHITE);
@@ -113,7 +119,7 @@ public class VehicleWindow extends JFrame {
         gbc.insets = new Insets(20, 0, 0, 0);
         contentPanel.add(proceedButton, gbc);
 
-        // Panel boczny (sidebar)
+        // Setup sidebar
         Image planningImage = new ImageIcon("src/images/plan_icon.png").getImage();
         Icon planningIcon = new ImageIcon(planningImage);
         Image showImage = new ImageIcon("src/images/show_icon.png").getImage();
@@ -131,6 +137,7 @@ public class VehicleWindow extends JFrame {
         titleOfSideBar.setFont(new Font("Arial", Font.BOLD, 30));
         titleOfSideBar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Create sidebar buttons
         JButton planning = createToggleButton("Planowanie");
         planning.setFont(new Font("Arial", Font.BOLD, 20));
         planning.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -148,6 +155,7 @@ public class VehicleWindow extends JFrame {
         analyze.setIcon(analyzeIcon);
         analyze.setIconTextGap(34);
 
+        // Group the buttons to ensure only one can be selected at a time
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(planning);
         buttonGroup.add(show);
@@ -165,16 +173,16 @@ public class VehicleWindow extends JFrame {
         Border blueLine = BorderFactory.createMatteBorder(0, 0, 0, 2, new Color(29, 157, 250));
         sidebar.setBorder(BorderFactory.createCompoundBorder(blueLine, margin));
 
-        // Główna część aplikacji
+        // Setup main panel
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(Color.LIGHT_GRAY);
         mainPanel.setLayout(new GridBagLayout());
         splitPane.setRightComponent(mainPanel);
 
-        // Ustawienie podziału
+        // Set divider location between sidebar and main panel
         splitPane.setDividerLocation(200);
 
-        //Setting component
+        // Setting component in the main panel
         gbc = new GridBagConstraints();
         gbc.insets = new Insets(30, 30, 30, 30);
         gbc.fill = GridBagConstraints.BOTH;
@@ -186,6 +194,7 @@ public class VehicleWindow extends JFrame {
         planning.doClick();
     }
 
+    // Helper method to create toggle buttons for the sidebar
     private static JButton createToggleButton(String text) {
         JButton button = new JButton(text);
         button.setContentAreaFilled(false);
@@ -218,6 +227,7 @@ public class VehicleWindow extends JFrame {
         return button;
     }
 
+    // Helper method to get the selected vehicles from the checkboxes
     private List<Vehicle> getSelectedVehicles() {
         List<Vehicle> selectedVehicles = new ArrayList<>();
         for (JCheckBox checkBox : vehicleCheckBoxes) {

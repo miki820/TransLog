@@ -46,6 +46,7 @@ public abstract class Worker implements Serializable {
     private List<Vehicle> drivenVehicles = new ArrayList<>();
     private List<Vehicle> repairedVehicles = new ArrayList<>();
 
+    // Constructor to initialize Worker with basic details
     public Worker(String name, String surname, LocalDate birthDate, int seniority, String previousJob, Branch branch) {
         this.name = name;
         this.surname = surname;
@@ -298,7 +299,7 @@ public abstract class Worker implements Serializable {
         }
     }
 
-    // Methods to handle optional attribute
+    // Methods to handle optional attribute serialization
     private void writeObject(ObjectOutputStream oos) throws IOException {
         previousJobSerialized = previousJob.orElse(null);
         oos.defaultWriteObject();
@@ -309,7 +310,7 @@ public abstract class Worker implements Serializable {
         previousJob = Optional.ofNullable(previousJobSerialized);
     }
 
-    // Methods to write and read extent
+    // Methods to write and read extent of the class
     public static void writeExtent(ObjectOutputStream stream) throws IOException {
         stream.writeObject(allWorkers);
         stream.writeObject(allExperiences);
