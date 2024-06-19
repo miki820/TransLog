@@ -8,4 +8,10 @@
 
 <h2>Assosiations:</h2>
 
-- Composition: VehicleModel.Engine is assosiated with VehicleModel.Vehicle by composition 1-1.
+- Composition: Engine is assosiated with VehicleModel.Vehicle by composition 1-1.
+
+<h2>Inheritence</h2>
+- Overlapping: Worker class can be Driver and Mechanic.
+
+<h2>Constraints</h2>
+-Unique: License Plate Number
