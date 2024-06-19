@@ -2,15 +2,13 @@ package WorkerModel;
 
 import VehicleModel.Vehicle;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
 
 public abstract class Worker implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private String name;
@@ -22,7 +20,7 @@ public abstract class Worker implements Serializable {
     private int seniority;
     private transient Optional<String> previousJob;
     private String previousJobSerialized;
-    private EnumSet<EmployeeType> employeeType = EnumSet.of(EmployeeType.WORKER);
+    private final EnumSet<EmployeeType> employeeType = EnumSet.of(EmployeeType.WORKER);
 
     // Attribute for Mechanic class
     private String specialization;
@@ -31,7 +29,7 @@ public abstract class Worker implements Serializable {
     private int drivingLicenseNumber;
 
     // Attribute for Branch
-    private Branch branch;
+    private final Branch branch;
 
     // Each worker can have one experience
     private Experience experience;
@@ -43,8 +41,8 @@ public abstract class Worker implements Serializable {
     private static Set<Experience> allExperiences = new HashSet<>();
 
     // Lists to store vehicles driven and repaired by the worker
-    private List<Vehicle> drivenVehicles = new ArrayList<>();
-    private List<Vehicle> repairedVehicles = new ArrayList<>();
+    private final List<Vehicle> drivenVehicles = new ArrayList<>();
+    private final List<Vehicle> repairedVehicles = new ArrayList<>();
 
     // Constructor to initialize Worker with basic details
     public Worker(String name, String surname, LocalDate birthDate, int seniority, String previousJob, Branch branch) {
@@ -300,11 +298,13 @@ public abstract class Worker implements Serializable {
     }
 
     // Methods to handle optional attribute serialization
+    @Serial
     private void writeObject(ObjectOutputStream oos) throws IOException {
         previousJobSerialized = previousJob.orElse(null);
         oos.defaultWriteObject();
     }
 
+    @Serial
     private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
         ois.defaultReadObject();
         previousJob = Optional.ofNullable(previousJobSerialized);

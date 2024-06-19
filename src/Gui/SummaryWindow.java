@@ -6,14 +6,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.stream.Collectors;
 import Extent.ExtentManager;
+import WorkerModel.Worker;
 
 public class SummaryWindow extends JFrame {
 
-    private Transport transport;
-
     // Constructor to initialize the summary window with the given transport details
     public SummaryWindow(Transport transport) {
-        this.transport = transport;
 
         setTitle("Podsumowanie");
         setSize(600, 400);
@@ -37,7 +35,7 @@ public class SummaryWindow extends JFrame {
 
         String driverInfo = transport.getVehicles().stream()
                 .flatMap(vehicle -> vehicle.getAllDrivers().stream())
-                .map(driver -> driver.getName())
+                .map(Worker::getName)
                 .collect(Collectors.joining(", "));
 
         // Text area to display the summary information

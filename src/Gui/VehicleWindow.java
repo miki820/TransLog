@@ -16,20 +16,11 @@ public class VehicleWindow extends JFrame {
     private static JButton lastSelectedButton = null;
 
     // List to store checkboxes for vehicle selection
-    private List<JCheckBox> vehicleCheckBoxes = new ArrayList<>();
-
-    // Variables to store transport details
-    private String startingPoint;
-    private String endingPoint;
-    private String cargo;
-    private LocalDate transportDate;
+    private final List<JCheckBox> vehicleCheckBoxes = new ArrayList<>();
 
     // Constructor to initialize the VehicleWindow with transport details
     public VehicleWindow(String startingPoint, String endingPoint, String cargo, LocalDate transportDate) {
-        this.startingPoint = startingPoint;
-        this.endingPoint = endingPoint;
-        this.cargo = cargo;
-        this.transportDate = transportDate;
+        // Variables to store transport details
 
         setTitle("TransLog - Select Vehicles");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,21 +86,18 @@ public class VehicleWindow extends JFrame {
         proceedButton.setPreferredSize(new Dimension(100, 40));
         proceedButton.setFocusPainted(false);
         proceedButton.setBorderPainted(false);
-        proceedButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                List<Vehicle> selectedVehicles = getSelectedVehicles();
-                if (selectedVehicles.size() < 1 || selectedVehicles.size() > 2) {
-                    JOptionPane.showMessageDialog(VehicleWindow.this, "Please select at least one and at most two vehicles.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    // Create a new VehicleModel.Transport object
-                    Transport transport = new Transport(startingPoint, endingPoint, cargo, transportDate, selectedVehicles);
+        proceedButton.addActionListener(e -> {
+            List<Vehicle> selectedVehicles = getSelectedVehicles();
+            if (selectedVehicles.isEmpty() || selectedVehicles.size() > 2) {
+                JOptionPane.showMessageDialog(VehicleWindow.this, "Please select at least one and at most two vehicles.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                // Create a new VehicleModel.Transport object
+                Transport transport = new Transport(startingPoint, endingPoint, cargo, transportDate, selectedVehicles);
 
-                    // Open summary window
-                    SummaryWindow summaryWindow = new SummaryWindow(transport);
-                    summaryWindow.setVisible(true);
-                    VehicleWindow.this.dispose();
-                }
+                // Open summary window
+                SummaryWindow summaryWindow = new SummaryWindow(transport);
+                summaryWindow.setVisible(true);
+                VehicleWindow.this.dispose();
             }
         });
 
@@ -203,24 +191,21 @@ public class VehicleWindow extends JFrame {
         button.setForeground(Color.BLACK);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JButton clickedButton = (JButton) e.getSource();
-                if (lastSelectedButton != null && lastSelectedButton != clickedButton) {
-                    lastSelectedButton.setOpaque(false);
-                    lastSelectedButton.setForeground(Color.BLACK);
-                }
-                if (clickedButton == lastSelectedButton) {
-                    clickedButton.setOpaque(false);
-                    clickedButton.setForeground(Color.BLACK);
-                    lastSelectedButton = null;
-                } else {
-                    clickedButton.setOpaque(true);
-                    clickedButton.setBackground(new Color(29, 157, 250));
-                    clickedButton.setForeground(Color.WHITE);
-                    lastSelectedButton = clickedButton;
-                }
+        button.addActionListener(e -> {
+            JButton clickedButton = (JButton) e.getSource();
+            if (lastSelectedButton != null && lastSelectedButton != clickedButton) {
+                lastSelectedButton.setOpaque(false);
+                lastSelectedButton.setForeground(Color.BLACK);
+            }
+            if (clickedButton == lastSelectedButton) {
+                clickedButton.setOpaque(false);
+                clickedButton.setForeground(Color.BLACK);
+                lastSelectedButton = null;
+            } else {
+                clickedButton.setOpaque(true);
+                clickedButton.setBackground(new Color(29, 157, 250));
+                clickedButton.setForeground(Color.WHITE);
+                lastSelectedButton = clickedButton;
             }
         });
 
