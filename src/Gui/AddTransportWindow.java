@@ -11,10 +11,18 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * AddTransportWindow is a GUI window for adding transport details.
+ * It uses Swing components to create a user-friendly interface.
+ */
 public class AddTransportWindow extends JFrame {
     private static JButton lastSelectedButton = null;
     private static ButtonGroup buttonGroup = new ButtonGroup();
 
+    /**
+     * Constructor for AddTransportWindow.
+     * Initializes the window and its components.
+     */
     public AddTransportWindow() {
         setTitle("TransLog");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,18 +34,19 @@ public class AddTransportWindow extends JFrame {
         splitPane.setDividerSize(0);
         getContentPane().add(splitPane, BorderLayout.CENTER);
 
-        // Text Fields Panel
+        // GridBagConstraints for layout management
         GridBagConstraints gbc = new GridBagConstraints();
         JPanel textFields = new JPanel(new GridBagLayout());
         textFields.setBackground(Color.WHITE);
         textFields.setBorder(BorderFactory.createEmptyBorder(20, 18, 20, 20));
 
+        // Configure GridBagConstraints
         gbc.gridwidth = 1;
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(8, 0, 10, 0); // Add spacing between text fields
 
-        // Create and add text fields
+        // Create and add text fields with placeholders
         RoundedTextField punktKoncowyField = createPlaceholderTextField("Punkt końcowy");
         punktKoncowyField.setBackground(new Color(220, 220, 220));
         punktKoncowyField.setPreferredSize(new Dimension(300, 30));
@@ -70,9 +79,11 @@ public class AddTransportWindow extends JFrame {
         contentPanel.setBackground(Color.WHITE);
         contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
+        // Title label for content panel
         JLabel titleOfContentPage = new JLabel("Planowanie Transportu");
         titleOfContentPage.setFont(new Font("Arial", Font.BOLD, 22));
 
+        // Add title label to content panel
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
@@ -80,12 +91,13 @@ public class AddTransportWindow extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
         contentPanel.add(titleOfContentPage, gbc);
 
+        // Add text fields to content panel
         gbc.gridy = 1;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         contentPanel.add(textFields, gbc);
 
-        // "Dodaj" button
+        // "Dodaj" button configuration
         JButton dodajButton = new JButton("Dodaj");
         dodajButton.setForeground(Color.WHITE);
         dodajButton.setBackground(new Color(29, 157, 250));
@@ -93,9 +105,11 @@ public class AddTransportWindow extends JFrame {
         dodajButton.setFocusPainted(false);
         dodajButton.setBorderPainted(false);
 
+        // Action listener for "Dodaj" button
         dodajButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Retrieve and validate input data
                 String startingPoint = punktStartowyField.getText();
                 String endingPoint = punktKoncowyField.getText();
                 String cargo = przewozonyTowarField.getText();
@@ -109,19 +123,21 @@ public class AddTransportWindow extends JFrame {
                     return;
                 }
 
+                // Open VehicleWindow with input data
                 VehicleWindow vehicleWindow = new VehicleWindow(startingPoint, endingPoint, cargo, transportDate);
                 vehicleWindow.setVisible(true);
                 AddTransportWindow.this.dispose();
             }
         });
 
+        // Add "Dodaj" button to content panel
         gbc.gridy = 2;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.SOUTH;
         gbc.insets = new Insets(20, 0, 0, 0);
         contentPanel.add(dodajButton, gbc);
 
-        // Sidebar panel
+        // Sidebar panel configuration
         Image planningImage = new ImageIcon("src/images/plan_icon.png").getImage();
         Icon planningIcon = new ImageIcon(planningImage);
         Image showImage = new ImageIcon("src/images/show_icon.png").getImage();
@@ -135,10 +151,12 @@ public class AddTransportWindow extends JFrame {
         sidebar.setBackground(Color.WHITE);
         splitPane.setLeftComponent(sidebar);
 
+        // Sidebar title label
         JLabel titleOfSideBar = new JLabel("TransLog");
         titleOfSideBar.setFont(new Font("Arial", Font.BOLD, 30));
         titleOfSideBar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Create sidebar buttons
         JButton planning = createToggleButton("Planowanie");
         planning.setFont(new Font("Arial", Font.BOLD, 20));
         planning.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -156,10 +174,12 @@ public class AddTransportWindow extends JFrame {
         analyze.setIcon(analyzeIcon);
         analyze.setIconTextGap(34);
 
+        // Add buttons to ButtonGroup
         buttonGroup.add(planning);
         buttonGroup.add(show);
         buttonGroup.add(analyze);
 
+        // Add components to sidebar
         sidebar.add(titleOfSideBar);
         sidebar.add(Box.createVerticalStrut(50));
         sidebar.add(planning);
@@ -168,11 +188,12 @@ public class AddTransportWindow extends JFrame {
         sidebar.add(Box.createVerticalStrut(10));
         sidebar.add(analyze);
 
+        // Set sidebar border
         Border margin = BorderFactory.createEmptyBorder(30, 0, 0, 0);
         Border blueLine = BorderFactory.createMatteBorder(0, 0, 0, 2, new Color(29, 157, 250));
         sidebar.setBorder(BorderFactory.createCompoundBorder(blueLine, margin));
 
-        // Main panel
+        // Main panel configuration
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(Color.LIGHT_GRAY);
         mainPanel.setLayout(new GridBagLayout());
@@ -181,7 +202,7 @@ public class AddTransportWindow extends JFrame {
         // Set divider location
         splitPane.setDividerLocation(200);
 
-        // Setting components
+        // Add content panel to main panel
         gbc = new GridBagConstraints();
         gbc.insets = new Insets(30, 30, 30, 30);
         gbc.fill = GridBagConstraints.BOTH;
@@ -193,6 +214,11 @@ public class AddTransportWindow extends JFrame {
         planning.doClick();
     }
 
+    /**
+     * Creates a toggle button with specified text.
+     * @param text The text to display on the button.
+     * @return A configured JButton.
+     */
     private static JButton createToggleButton(String text) {
         JButton button = new JButton(text);
         button.setContentAreaFilled(false);
@@ -201,6 +227,7 @@ public class AddTransportWindow extends JFrame {
         button.setForeground(Color.BLACK);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Action listener for toggle button
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -224,6 +251,11 @@ public class AddTransportWindow extends JFrame {
         return button;
     }
 
+    /**
+     * Creates a rounded text field with a placeholder.
+     * @param placeholder The placeholder text.
+     * @return A configured RoundedTextField.
+     */
     private static RoundedTextField createPlaceholderTextField(String placeholder) {
         RoundedTextField textField = new RoundedTextField(20) {
             @Override
@@ -245,6 +277,7 @@ public class AddTransportWindow extends JFrame {
         textField.setBackground(new Color(220, 220, 220));
         textField.setPreferredSize(new Dimension(300, 30));
 
+        // Focus listener to repaint placeholder text on focus change
         textField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -257,12 +290,5 @@ public class AddTransportWindow extends JFrame {
             }
         });
         return textField;
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            AddTransportWindow frame = new AddTransportWindow();
-            frame.setVisible(true);
-        });
     }
 }
